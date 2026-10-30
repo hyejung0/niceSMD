@@ -1,3 +1,12 @@
+# niceSMD (development)
+
+* `show_missing` now also accepts `"always"`, `"never"`, and `"if_any"` (Missing
+  row only for variables with missing values); `TRUE`/`FALSE` still work.
+* New `notes` argument: `"full"` (default), `"short"`, or `"none"` footnotes.
+* Tables render as formatted tables in Quarto/R Markdown via a `knit_print`
+  method; new `table1_kable()` helper; console print indents category levels.
+* Help pages rewritten with detailed argument descriptions and examples.
+
 # niceSMD 0.1.0
 
 * Initial GitHub source package based on the original nice_SMD_table1 function.

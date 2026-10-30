@@ -40,6 +40,15 @@ save_table1_docx(weighted, "output/Table1_weighted.docx",
 utils::write.csv(weighted$smd, "output/numeric_SMDs.csv", row.names = FALSE)
 utils::write.csv(as.data.frame(weighted), "output/Table1_weighted.csv", row.names = FALSE)
 
+# Manuscript-style table: hide empty Missing rows and use a short legend.
+compact <- nice_SMD_table1(
+  dat = d, group = "group", covar_names = c("age", "stratum", "sex"),
+  group_for_SMD = c("Control", "Treatment"),
+  show_missing = "if_any", notes = "short"
+)
+print(compact)
+save_table1_docx(compact, "output/Table1_compact.docx", overwrite = TRUE)
+
 # Survey-design route, retaining stratification:
 design <- survey::svydesign(ids = ~cluster, strata = ~stratum,
                              weights = ~analysis_weight, data = d)

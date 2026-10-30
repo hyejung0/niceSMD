@@ -87,11 +87,35 @@ For complex survey data, supply a design object; see the user guide.
 | Missing percentage denominator | All included people in the group | Full included group weight total |
 | Continuous summary and SMD | Excludes missing values separately for each variable | Excludes missing values separately for each variable |
 
-Rows with a missing group or a zero weight are excluded with a warning.
-Negative, missing, or infinite weights are rejected. These conventions are
-included as Word table footnotes. Missing-value rows appear even when the
-count is zero; set `show_missing = FALSE` to hide them without changing
-the calculations.
+Rows with a missing group or a zero weight are excluded with a warning. Negative, missing, or infinite weights are rejected. These conventions are included as Word table footnotes (`notes = "full"`, the default).
+
+### Controlling Missing rows and footnotes
+
+```r
+# Show a Missing row only for variables that actually have missing values
+tab <- nice_SMD_table1(d, "group", c("age", "stratum", "sex"),
+                       group_for_SMD = c("Control", "Treatment"),
+                       show_missing = "if_any",   # TRUE/"always", FALSE/"never", "if_any"
+                       notes = "short")           # "full", "short", "none"
+```
+
+| `show_missing` | Behavior |
+|---|---|
+| `TRUE` or `"always"` (default) | Missing row for every variable, even when all counts are zero |
+| `FALSE` or `"never"` | No Missing rows |
+| `"if_any"` | Missing row only for variables with at least one missing value in a displayed group |
+
+| `notes` | Footnote |
+|---|---|
+| `"full"` (default) | Every denominator, missing-value, SMD, and quartile convention |
+| `"short"` | Two or three lines: cell layout, SMD definition, `NE`; plus excluded rows or hidden Missing rows when applicable |
+| `"none"` | No footnotes |
+
+Neither option changes any calculation; both only change what is displayed.
+
+## Quarto and R Markdown
+
+A chunk that ends with `tab` renders the formatted table (bold variable names, indented levels, footnotes) in HTML, Word, and PDF output. Use `table1_flextable(tab, font_size = 9)` to control size and fonts, or `table1_kable(tab)` as a lightweight fallback for PDF.
 
 ## What the SMD means
 

@@ -150,8 +150,16 @@ In a weighted table, replace each count in that example by its sum of weights.
 Missing percentages use the full group weight total. These definitions are
 written in every exported table's notes by default.
 
-`show_missing = FALSE` hides missing rows without imputing observations or
-changing the denominators. All-missing continuous summaries display `NA`;
+`show_missing` controls only the display of the Missing row: `TRUE`/`"always"`
+(default) shows one for every variable, `FALSE`/`"never"` hides them all, and
+`"if_any"` shows one only for variables with at least one missing value in a
+displayed group. No setting imputes observations or changes the denominators.
+
+`notes` controls the footnotes: `"full"` (default) documents every convention,
+`"short"` gives a compact legend suited to manuscript tables, and `"none"`
+omits footnotes. The text is stored in `tab$notes`.
+
+ All-missing continuous summaries display `NA`;
 an SMD with insufficient observed data displays `NE`, with a reason in `smd`.
 
 ## Continuous summary definitions

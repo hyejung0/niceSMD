@@ -26,7 +26,7 @@ table1_flextable <- function(x, font_size = 10, font_family = "Arial",
   if (length(details)) {
     ft <- flextable::padding(ft, i = details, j = 1L, padding.left = 12, part = "body")
   }
-  if (include_notes) {
+  if (include_notes && length(x$notes)) {
     ft <- flextable::add_footer_lines(ft, values = x$notes)
     ft <- flextable::fontsize(ft, size = max(8, font_size - 1), part = "footer")
     ft <- flextable::align(ft, align = "left", part = "footer")

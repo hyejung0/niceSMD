@@ -8,7 +8,7 @@ nice_SMD_table1 <- function(
     group_for_SMD = NULL, catDigits = 1, contDigits = 2, smdDigits = 3,
     categorical_vars = NULL, weights = NULL, design = NULL,
     weightDigits = 1, show_missing = TRUE, group_order = NULL,
-    title = "Table 1", docx_path = NULL) {
+    title = "Table 1", docx_path = NULL, notes = "full") {
 
   weighted <- !is.null(weights) || !is.null(design)
   if (!is.null(weights) && !is.null(design)) {
@@ -45,9 +45,10 @@ nice_SMD_table1 <- function(
       stop(nm, " must be an integer from 0 to 10.", call. = FALSE)
     }
   }
-  if (!is.logical(show_missing) || length(show_missing) != 1L ||
-      is.na(show_missing)) {
-    stop("show_missing must be TRUE or FALSE.", call. = FALSE)
+  missing_mode <- .nice_missing_mode(show_missing)
+  if (!is.character(notes) || length(notes) != 1L || is.na(notes) ||
+      !notes %in% c("full", "short", "none")) {
+    stop("notes must be one of \"full\", \"short\", or \"none\".", call. = FALSE)
   }
   if (!is.character(title) || length(title) != 1L || is.na(title)) {
     stop("title must be one character string.", call. = FALSE)
@@ -292,6 +293,7 @@ nice_SMD_table1 <- function(
                                             stringsAsFactors = FALSE)
   }
   count_digits <- if (weighted) weightDigits else 0
+  n_hidden_missing <- 0L
   for (j in seq_along(keys)) {
     z <- summary_list[[j]]
     smd_text <- if (is.na(smd$smd[j])) "NE" else if (is.infinite(smd$smd[j])) "Inf" else
@@ -316,11 +318,14 @@ nice_SMD_table1 <- function(
       add_row("Mean (SD)", means, "", covar_names[j], "summary")
       add_row("Median (Q1, Q3)", medians, "", covar_names[j], "summary")
     }
-    if (show_missing) {
+    has_missing <- any(vapply(z, function(a) a$missing_count > 0, logical(1)))
+    if (missing_mode == "always" || (missing_mode == "if_any" && has_missing)) {
       missing_values <- vapply(z, function(a) {
         .nice_count_pct(a$missing_count, a$missing_pct, count_digits, catDigits)
       }, character(1))
       add_row("Missing", missing_values, "", covar_names[j], "missing")
+    } else if (missing_mode == "if_any") {
+      n_hidden_missing <- n_hidden_missing + 1L
     }
   }
   table <- as.data.frame(do.call(rbind, rows), stringsAsFactors = FALSE)
@@ -328,29 +333,19 @@ nice_SMD_table1 <- function(
   rownames(table) <- NULL
   row_info <- do.call(rbind, info)
   rownames(row_info) <- NULL
-  notes <- c(
-    if (weighted) {
-      "n is the number of people with positive weights; sum(w) and category/missing counts are sums of weights. Weights are used as supplied, without normalization or trimming."
-    } else "N and category/missing counts are numbers of people.",
-    if (weighted) {
-      "Category percentages use the nonmissing sum of weights for that variable and group. Missing percentages use the full group sum of weights."
-    } else {
-      "Category percentages use the nonmissing number of people for that variable and group. Missing percentages use the full group number of people."
-    },
-    "Continuous summaries and SMDs exclude missing values separately for each variable. Missingness is not included as a category in SMDs.",
-    paste0("Absolute SMDs compare ", group_for_SMD[1L], " and ", group_for_SMD[2L],
-           ". A multilevel categorical SMD compares its category proportions jointly."),
-    if (weighted) {
-      "Weighted SDs and SMDs follow survey/tableone conventions; weighted quartiles use survey::svyquantile with qrule = 'math'."
-    } else "Unweighted quartiles use stats::quantile with type = 7.",
-    "NE = not estimable; Inf = a nonzero difference with zero standardizing variance; NA = an unavailable descriptive summary. Details are in the returned smd component."
-  )
-  if (any(!keep)) notes <- c(notes, paste0(sum(!keep), " rows were excluded for missing group or zero weight."))
+  notes_style <- notes
+  notes <- .nice_notes(style = notes_style, weighted = weighted,
+                       comparison = group_for_SMD,
+                       n_excluded = sum(!keep),
+                       missing_mode = missing_mode,
+                       n_hidden_missing = n_hidden_missing)
   result <- structure(list(table = table, smd = smd, groups = groups,
                             row_info = row_info, notes = notes,
                             settings = list(weighted = weighted,
                               comparison = group_for_SMD, title = title,
                               exclusions = exclusions,
+                              show_missing = missing_mode,
+                              notes_style = notes_style,
                               categorical_vars = covar_names[categorical],
                               category_denominator = "nonmissing",
                               missing_denominator = "all_included",
@@ -432,4 +427,70 @@ nice_SMD_table1 <- function(
     return(list(value = NA_real_, reason = "Singular or numerically singular covariance for multilevel category proportions."))
   }
   NULL
+}
+
+# Normalizes show_missing to one of "always", "never", "if_any".
+# TRUE/FALSE are accepted for backward compatibility.
+.nice_missing_mode <- function(x) {
+  bad <- function() stop("show_missing must be TRUE, FALSE, \"always\", \"never\", or \"if_any\".",
+                         call. = FALSE)
+  if (length(x) != 1L || is.na(x)) bad()
+  if (is.logical(x)) return(if (x) "always" else "never")
+  if (is.character(x) && x %in% c("always", "never", "if_any")) return(x)
+  bad()
+}
+
+# Builds the footnote text. "full" documents every convention; "short" gives a
+# compact publication-style legend; "none" returns no notes.
+.nice_notes <- function(style, weighted, comparison, n_excluded,
+                        missing_mode, n_hidden_missing) {
+  if (style == "none") return(character(0))
+  pair <- paste0(comparison[1L], " and ", comparison[2L])
+  pair_vs <- paste0(comparison[1L], " vs. ", comparison[2L])
+  if (style == "short") {
+    out <- c(
+      if (weighted) {
+        paste0("Categorical variables: weighted n (%) among nonmissing values. ",
+               "Continuous variables: weighted mean (SD) and median (Q1, Q3). ",
+               "Missing: weighted n (% of group).")
+      } else {
+        paste0("Categorical variables: n (%) among nonmissing values. ",
+               "Continuous variables: mean (SD) and median (Q1, Q3). ",
+               "Missing: n (% of group).")
+      },
+      paste0("SMD = absolute standardized mean difference (", pair_vs,
+             "); NE = not estimable.")
+    )
+    if (missing_mode == "if_any" && n_hidden_missing > 0L) {
+      out <- c(out, "Variables without a Missing row have no missing values.")
+    }
+    if (n_excluded > 0L) {
+      out <- c(out, paste0(n_excluded, " rows excluded (missing group or zero weight)."))
+    }
+    return(out)
+  }
+  out <- c(
+    if (weighted) {
+      "n is the number of people with positive weights; sum(w) and category/missing counts are sums of weights. Weights are used as supplied, without normalization or trimming."
+    } else "N and category/missing counts are numbers of people.",
+    if (weighted) {
+      "Category percentages use the nonmissing sum of weights for that variable and group. Missing percentages use the full group sum of weights."
+    } else {
+      "Category percentages use the nonmissing number of people for that variable and group. Missing percentages use the full group number of people."
+    },
+    "Continuous summaries and SMDs exclude missing values separately for each variable. Missingness is not included as a category in SMDs.",
+    paste0("Absolute SMDs compare ", pair,
+           ". A multilevel categorical SMD compares its category proportions jointly."),
+    if (weighted) {
+      "Weighted SDs and SMDs follow survey/tableone conventions; weighted quartiles use survey::svyquantile with qrule = 'math'."
+    } else "Unweighted quartiles use stats::quantile with type = 7.",
+    "NE = not estimable; Inf = a nonzero difference with zero standardizing variance; NA = an unavailable descriptive summary. Details are in the returned smd component."
+  )
+  if (missing_mode == "if_any" && n_hidden_missing > 0L) {
+    out <- c(out, "A Missing row is shown only for variables with at least one missing value; variables without one have no missing values in the included rows.")
+  }
+  if (n_excluded > 0L) {
+    out <- c(out, paste0(n_excluded, " rows were excluded for missing group or zero weight."))
+  }
+  out
 }

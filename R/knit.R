@@ -35,15 +35,21 @@ knit_print.nice_table1 <- function(x, ..., options = NULL) {
 #' @export
 table1_kable <- function(x, format = NULL) {
   if (!inherits(x, "nice_table1")) stop("x must be a nice_table1 object.", call. = FALSE)
+  if (!is.null(format) && (!is.character(format) || length(format) != 1L || is.na(format))) {
+    stop("format must be NULL or one character string.", call. = FALSE)
+  }
   tab <- x$table
   is_var <- x$row_info$type == "variable"
-  indent <- if (!is.null(format) && format == "latex") "\\hspace{1em}" else "&nbsp;&nbsp;&nbsp;&nbsp;"
+  kind <- if (is.null(format)) "markdown" else format
+  indent <- if (kind == "latex") "\\hspace{1em}" else "&nbsp;&nbsp;&nbsp;&nbsp;"
   first <- as.character(tab[[1L]])
-  first[is_var] <- if (!is.null(format) && format == "latex") {
-    paste0("\\textbf{", first[is_var], "}")
-  } else paste0("**", first[is_var], "**")
+  first[is_var] <- switch(kind,
+    latex = paste0("\\textbf{", first[is_var], "}"),
+    html = paste0("<strong>", first[is_var], "</strong>"),
+    paste0("**", first[is_var], "**"))
   first[!is_var] <- paste0(indent, first[!is_var])
   tab[[1L]] <- first
   names(tab) <- gsub("\n", " ", names(tab), fixed = TRUE)
-  knitr::kable(tab, format = format, escape = FALSE, align = c("l", rep("c", ncol(tab) - 1L)))
+  knitr::kable(tab, format = format, escape = FALSE, row.names = FALSE,
+               align = c("l", rep("c", ncol(tab) - 1L)))
 }
