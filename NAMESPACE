@@ -1,0 +1,6 @@
+export(example_table1_data)
+export(nice_SMD_table1)
+export(save_table1_docx)
+export(table1_flextable)
+S3method(as.data.frame,nice_table1)
+S3method(print,nice_table1)

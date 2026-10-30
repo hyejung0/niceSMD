@@ -1,0 +1,10 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.github$
+^\.gitignore$
+^START_HERE\.md$
+^GITHUB_SETUP\.md$
+^DEVELOPMENT\.md$
+^VALIDATION\.md$
+^LICENSE\.md$
+^tools$

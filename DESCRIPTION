@@ -1,0 +1,20 @@
+Package: niceSMD
+Title: Descriptive Tables with Variable Level Standardized Differences
+Version: 0.1.0
+Authors@R: person("Hyejung", "Lee", role = c("aut", "cre"), email =
+             "hyejung.lee@utah.edu")
+Description: Creates descriptive tables for unweighted data, nonnegative
+             analysis weights, and survey designs. Reports one absolute
+             standardized mean difference per variable for a selected pair of
+             groups, including a generalized difference for multilevel
+             categorical variables. Separates calculations from display labels
+             and exports editable Word tables.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports: flextable (>= 0.9.5), officer (>= 0.6.0), stats, survey (>= 4.1),
+             tableone (>= 0.13.2)
+Suggests: testthat (>= 3.0.0)
+Config/testthat/edition: 3
+URL: https://github.com/hyejung0/niceSMD
+BugReports: https://github.com/hyejung0/niceSMD/issues
