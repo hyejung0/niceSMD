@@ -53,3 +53,6 @@ table1_kable <- function(x, format = NULL) {
   knitr::kable(tab, format = format, escape = FALSE, row.names = FALSE,
                align = c("l", rep("c", ncol(tab) - 1L)))
 }
+
+# Same rendering path as nice_table1: table1_flextable() dispatches on class.
+knit_print.nice_trial_table1 <- knit_print.nice_table1

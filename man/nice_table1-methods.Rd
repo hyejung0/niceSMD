@@ -3,14 +3,21 @@
 \alias{as.data.frame.nice_table1}
 \alias{knit_print.nice_table1}
 \alias{nice_table1-methods}
+\alias{print.nice_trial_table1}
+\alias{as.data.frame.nice_trial_table1}
+\alias{knit_print.nice_trial_table1}
 \title{Print, Render, and Extract Table 1 Data}
 \usage{
 \method{print}{nice_table1}(x, ...)
 \method{as.data.frame}{nice_table1}(x, row.names = NULL, optional = FALSE, ...)
+\method{print}{nice_trial_table1}(x, ...)
+\method{as.data.frame}{nice_trial_table1}(x, row.names = NULL, optional = FALSE, ...)
 knit_print.nice_table1(x, ..., options = NULL)
+knit_print.nice_trial_table1(x, ..., options = NULL)
 }
 \arguments{
-  \item{x}{A \code{nice_table1} object returned by \code{\link{nice_SMD_table1}}.}
+  \item{x}{A \code{nice_table1} object returned by \code{\link{nice_SMD_table1}}, or a
+  \code{nice_trial_table1} object returned by \code{\link{nice_trial_table1}}.}
   \item{...}{For \code{print}, additional arguments passed to data.frame
   printing. For \code{knit_print}, passed to the underlying renderer. Unused by
   \code{as.data.frame}.}

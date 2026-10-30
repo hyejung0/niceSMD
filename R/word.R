@@ -2,7 +2,9 @@
 #' @export
 table1_flextable <- function(x, font_size = 10, font_family = "Arial",
                             include_notes = TRUE) {
-  if (!inherits(x, "nice_table1")) stop("x must be a nice_table1 object.", call. = FALSE)
+  if (!inherits(x, c("nice_table1", "nice_trial_table1"))) {
+    stop("x must be a nice_table1 or nice_trial_table1 object.", call. = FALSE)
+  }
   if (!is.numeric(font_size) || length(font_size) != 1L ||
       !is.finite(font_size) || font_size <= 0) {
     stop("font_size must be one positive number.", call. = FALSE)
@@ -12,6 +14,9 @@ table1_flextable <- function(x, font_size = 10, font_family = "Arial",
   }
   if (!is.logical(include_notes) || length(include_notes) != 1L || is.na(include_notes)) {
     stop("include_notes must be TRUE or FALSE.", call. = FALSE)
+  }
+  if (inherits(x, "nice_trial_table1")) {
+    return(.nice_trial_flextable(x, font_size, font_family, include_notes))
   }
   ft <- flextable::flextable(x$table)
   ft <- flextable::theme_booktabs(ft)
@@ -48,7 +53,9 @@ save_table1_docx <- function(x, path, title = x$settings$title,
                             landscape = FALSE, font_size = 10,
                             font_family = "Arial", include_notes = TRUE,
                             overwrite = FALSE) {
-  if (!inherits(x, "nice_table1")) stop("x must be a nice_table1 object.", call. = FALSE)
+  if (!inherits(x, c("nice_table1", "nice_trial_table1"))) {
+    stop("x must be a nice_table1 or nice_trial_table1 object.", call. = FALSE)
+  }
   if (!is.character(path) || length(path) != 1L || is.na(path) ||
       !grepl("\\.docx$", path, ignore.case = TRUE)) {
     stop("path must be a .docx filename.", call. = FALSE)

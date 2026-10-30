@@ -7,7 +7,8 @@ save_table1_docx(x, path, title = x$settings$title,
   include_notes = TRUE, overwrite = FALSE)
 }
 \arguments{
-  \item{x}{A \code{nice_table1} object returned by \code{\link{nice_SMD_table1}}.}
+  \item{x}{A \code{nice_table1} object returned by \code{\link{nice_SMD_table1}}, or a
+  \code{nice_trial_table1} object returned by \code{\link{nice_trial_table1}}.}
   \item{path}{A single filename ending in \code{.docx}. The directory must
   already exist. An existing file is not replaced unless \code{overwrite = TRUE}.}
   \item{title}{A single character string used as a \dQuote{Heading 1}

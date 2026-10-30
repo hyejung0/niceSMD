@@ -1,5 +1,12 @@
 # niceSMD (development)
 
+* New `nice_trial_table1()`: descriptive summaries by trial and treatment arm
+  for pooled individual participant data, with "wide" (trials side by side) and
+  "long" (one row per trial and arm) layouts, optional within-trial SMDs, and
+  the same `show_missing`, `notes`, weighting, Quarto, and Word support.
+* New `example_trial_data()`; `table1_flextable()` and `save_table1_docx()`
+  accept trial tables.
+
 * `show_missing` now also accepts `"always"`, `"never"`, and `"if_any"` (Missing
   row only for variables with missing values); `TRUE`/`FALSE` still work.
 * New `notes` argument: `"full"` (default), `"short"`, or `"none"` footnotes.

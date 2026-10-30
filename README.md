@@ -117,6 +117,25 @@ Neither option changes any calculation; both only change what is displayed.
 
 A chunk that ends with `tab` renders the formatted table (bold variable names, indented levels, footnotes) in HTML, Word, and PDF output. Use `table1_flextable(tab, font_size = 9)` to control size and fonts, or `table1_kable(tab)` as a lightweight fallback for PDF.
 
+## Several trials: summaries by trial and treatment
+
+For pooled individual participant data from multiple trials, `nice_trial_table1()` summarizes every trial separately by treatment arm, with the same conventions as `nice_SMD_table1()`:
+
+```r
+d <- example_trial_data()
+
+# Trials side by side (a few trials), SMD within each trial
+nice_trial_table1(d, "trial", "arm", c("age", "egfr", "sex", "ckd_stage"),
+                  treatment_for_SMD = c("Placebo", "Active"))
+
+# One row per trial and arm (many trials)
+nice_trial_table1(d, "trial", "arm", c("age", "egfr", "sex", "ckd_stage"),
+                  treatment_for_SMD = c("Placebo", "Active"),
+                  layout = "long", continuous_stats = "mean_sd", notes = "short")
+```
+
+Use `layout = "long"` when there are more than about three trials. SMDs for each trial and variable are always in `$smd`; `show_smd = FALSE` omits them from the wide display (baseline differences within a randomized trial are chance imbalances). See `?nice_trial_table1`.
+
 ## What the SMD means
 
 * Continuous variables use the absolute mean difference divided by the square

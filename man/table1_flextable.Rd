@@ -5,7 +5,8 @@
 table1_flextable(x, font_size = 10, font_family = "Arial", include_notes = TRUE)
 }
 \arguments{
-  \item{x}{A \code{nice_table1} object returned by \code{\link{nice_SMD_table1}}.}
+  \item{x}{A \code{nice_table1} object returned by \code{\link{nice_SMD_table1}}, or a
+  \code{nice_trial_table1} object returned by \code{\link{nice_trial_table1}}.}
   \item{font_size}{A single positive number: the font size in points for the
   header and body. Footnotes use \code{max(8, font_size - 1)}. Default 10.
   Reduce it (for example 8 or 9) for wide tables with many groups.}
