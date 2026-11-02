@@ -1,0 +1,98 @@
+---
+title: "Quarto, R Markdown, Word and PDF output"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r setup}
+library(niceSMD)
+d <- example_table1_data()
+tab <- nice_SMD_table1(
+  d, "group", c("age", "sex", "smoking"),
+  group_for_SMD = c("Control", "Treatment"), notes = "short"
+)
+```
+
+## In a Quarto or R Markdown document
+
+Put the object as the **last expression** of a chunk:
+
+```r
+# inside a .qmd or .Rmd code chunk
+tab
+```
+
+niceSMD registers a `knit_print` method, so `tab` is rendered as a formatted
+table (bold variable names, indented levels, footnotes) in HTML, Word, and PDF
+output. Printing it at the console gives a plain-text version with the same
+structure. The table below is rendered that way:
+
+```{r render}
+tab
+```
+
+If you assign the result (`tab <- nice_SMD_table1(...)`) the chunk prints
+nothing; end the chunk with `tab` to display it. `nice_trial_table1()` results
+render the same way.
+
+## Controlling size and fonts
+
+For a different font or size, end the chunk with the flextable instead:
+
+```{r sized}
+table1_flextable(tab, font_size = 9, font_family = "Arial")
+```
+
+Wide tables (many groups, or trial tables) read better in a smaller font or, in
+Word, a landscape section.
+
+## Further styling with flextable
+
+`table1_flextable()` returns an ordinary `flextable`, so any flextable function
+applies:
+
+```{r styled}
+ft <- table1_flextable(tab)
+ft <- flextable::bg(ft, part = "header", bg = "#EAF0F4")
+ft <- flextable::color(ft, part = "header", color = "#243746")
+ft
+```
+
+## Word files
+
+```{r docx, eval = FALSE}
+# Standalone Word file
+save_table1_docx(tab, "Table1.docx", landscape = TRUE, font_size = 9)
+
+# Or write while building the table
+nice_SMD_table1(d, "group", "age", group_for_SMD = c("Control", "Treatment"),
+                docx_path = "Table1.docx")
+
+# Export a flextable you modified yourself
+flextable::save_as_docx(`Participant characteristics` = ft, path = "Custom.docx")
+```
+
+`save_table1_docx()` never overwrites an existing file unless you set
+`overwrite = TRUE`. Headers repeat on each page, and a variable's name stays
+with its first row.
+
+## PDF output
+
+Table rendering to PDF goes through LaTeX. If flextable's PDF output has font
+or package problems on your machine, `table1_kable()` is a lighter alternative
+that needs only knitr:
+
+```{r kable, eval = FALSE}
+table1_kable(tab)                    # chunk ending: renders in the document format
+table1_kable(tab, format = "latex")  # force LaTeX
+cat(tab$notes, sep = "\n")           # footnotes are printed separately
+```
+
+## Extracting numbers
+
+```{r numbers}
+as.data.frame(tab)[1:3, ]            # the display table
+tab$smd[, c("label", "smd", "status")]  # unrounded SMDs
+```

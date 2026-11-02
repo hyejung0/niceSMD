@@ -1,0 +1,105 @@
+---
+title: "Tables by trial and treatment arm"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r setup}
+library(niceSMD)
+```
+
+When you pool individual participant data from several trials (for example in
+a trial-level surrogate endpoint analysis), `nice_trial_table1()` summarizes
+**each trial separately, by treatment arm**. Under the hood each trial is run
+through `nice_SMD_table1()`, so every convention (denominators, missing values,
+weights, SMDs) is identical; the function arranges the pieces into one table.
+
+## Example data
+
+`example_trial_data()` has three trials. Trials A and B compare Placebo with
+Active; Trial C adds a High dose arm.
+
+```{r data}
+d <- example_trial_data()
+table(d$trial, d$arm)
+```
+
+## Trials side by side
+
+```{r wide}
+vars <- c("age", "egfr", "sex", "diabetes", "ckd_stage")
+labels <- c("Age (years)", "eGFR (mL/min/1.73 m2)", "Sex", "Diabetes", "CKD stage")
+
+wide <- nice_trial_table1(
+  d, trial = "trial", treatment = "arm", covar_names = vars,
+  print_covariate_names = labels,
+  treatment_for_SMD = c("Placebo", "Active"),   # required: Trial C has 3 arms
+  notes = "short"
+)
+wide
+```
+
+Things to notice:
+
+* A header spans each trial; arms sit underneath with their sample sizes.
+* The SMD in each trial compares only the two arms named in
+  `treatment_for_SMD`. Trial C's High dose arm is shown but not compared.
+* `ckd_stage` G5 does not occur in Trial A, so it displays as a zero count.
+* A Missing row appears only for `age` and `eGFR`, the only variables with
+  missing values (`show_missing = "if_any"` is the default here).
+
+This layout works for a few trials. With many trials it becomes too wide.
+
+## One row per trial and arm
+
+```{r long}
+long <- nice_trial_table1(
+  d, "trial", "arm", vars, print_covariate_names = labels,
+  treatment_for_SMD = c("Placebo", "Active"),
+  layout = "long", continuous_stats = "mean_sd", notes = "short"
+)
+long
+```
+
+Variables run across the columns, categorical variables get one column per
+level, and each trial's rows are grouped. `continuous_stats = "mean_sd"` keeps
+only mean (SD), which roughly halves the width. SMDs are not shown in this
+layout, but they are always available:
+
+```{r smd}
+head(long$smd[, c("trial", "label", "smd", "status")], 6)
+```
+
+## Should the table include SMDs at all?
+
+Within a randomized trial, baseline differences between arms are chance
+imbalances, and reporting guidance discourages baseline significance tests.
+Many authors therefore omit within-trial SMDs. To drop the SMD columns from the
+wide table:
+
+```{r nosmd, eval = FALSE}
+nice_trial_table1(d, "trial", "arm", vars, treatment_for_SMD = c("Placebo", "Active"),
+                  show_smd = FALSE)
+```
+
+## Weights, order, and export
+
+```{r misc, eval = FALSE}
+# Weighted summaries within each trial and arm
+nice_trial_table1(d, "trial", "arm", vars, weights = "weight",
+                  treatment_for_SMD = c("Placebo", "Active"))
+
+# Put trials and arms in a chosen order
+nice_trial_table1(d, "trial", "arm", vars,
+                  treatment_for_SMD = c("Placebo", "Active"),
+                  trial_order = c("Trial C", "Trial A", "Trial B"),
+                  treatment_order = c("Active", "Placebo", "High dose"))
+
+# Word (landscape is recommended for trial tables)
+save_table1_docx(wide, "Table1_by_trial.docx", landscape = TRUE, font_size = 9)
+```
+
+Each trial's own table is kept in `wide$trials`, for example
+`wide$trials[["Trial A"]]`.

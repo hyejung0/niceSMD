@@ -8,7 +8,9 @@
 | `NAMESPACE` | Public functions and S3 method registrations |
 | `R/` | Table construction, calculations, Word export, example data |
 | `man/` | R help pages included in the package |
-| `inst/doc/user-guide.md` | Installed usage and statistical guide |
+| `vignettes/niceSMD.Rmd` | "Get started" vignette (built with the package) |
+| `vignettes/articles/` | Website-only articles: user guide, trial tables, output formats |
+| `_pkgdown.yml` | Website configuration (built by `.github/workflows/pkgdown.yaml`) |
 | `inst/examples/quickstart.R` | Complete runnable examples |
 | `tests/testthat/` | Numerical, edge-case, and Word structure tests |
 | `.github/workflows/` | Linux, Windows, and macOS package checks |

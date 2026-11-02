@@ -177,25 +177,32 @@ doc <- flextable::body_add_flextable(doc, value = ft)
 print(doc, target = "Custom_document.docx")
 ```
 
-In a Quarto document with `format: docx`, place `tab$flextable` as the final
-expression of a code chunk. This embeds editable table cells, rather than a
+In a Quarto or R Markdown document, end a code chunk with `tab` (or
+`tab$flextable`) to render the formatted table. This embeds editable table cells, rather than a
 screen image. The exporter protects existing files unless `overwrite = TRUE`.
 Very wide tables may need landscape orientation and a smaller font.
 
 ## More help
 
+Full documentation is on the website: <https://hyejung0.github.io/niceSMD/>
+
+* [Get started](https://hyejung0.github.io/niceSMD/articles/niceSMD.html)
+* [User guide](https://hyejung0.github.io/niceSMD/articles/user-guide.html): weights, survey designs, missing values, and SMD formulas
+* [Tables by trial and treatment arm](https://hyejung0.github.io/niceSMD/articles/multi-trial-tables.html)
+* [Quarto, Word and PDF output](https://hyejung0.github.io/niceSMD/articles/quarto-word-pdf.html)
+* [Function reference](https://hyejung0.github.io/niceSMD/reference/index.html)
+
+Inside R:
+
 ```r
-?nice_SMD_table1
-?save_table1_docx
-?table1_flextable
-system.file("doc", "user-guide.md", package = "niceSMD")
+vignette("niceSMD")          # Get started
+?nice_SMD_table1             # every argument, with examples
+?nice_trial_table1
 ```
 
-* [Complete user guide](inst/doc/user-guide.md)
-* [Runnable examples](inst/examples/quickstart.R)
-* [GitHub setup](GITHUB_SETUP.md)
-* [Development and testing](DEVELOPMENT.md)
-* [Validation status](VALIDATION.md)
+Also in this repository: [runnable examples](inst/examples/quickstart.R),
+[GitHub setup](GITHUB_SETUP.md), [development and testing](DEVELOPMENT.md),
+and [validation status](VALIDATION.md).
 
 ## Changes from the original function
 

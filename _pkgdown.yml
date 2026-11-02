@@ -2,18 +2,34 @@ url: https://hyejung0.github.io/niceSMD
 
 template:
   bootstrap: 5
+  math-rendering: katex
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, github]
+
+articles:
+  - title: Guides
+    navbar: Guides
+    contents:
+      - '`articles/user-guide`'
+      - '`articles/multi-trial-tables`'
+      - '`articles/quarto-word-pdf`'
 
 reference:
   - title: Build tables
+    desc: Create a Table 1 with one absolute SMD per variable.
     contents:
       - nice_SMD_table1
       - nice_trial_table1
   - title: Format and export
+    desc: Print, render, style, and save tables.
     contents:
       - table1_flextable
       - table1_kable
       - save_table1_docx
-      - nice_table1-methods
+      - '`nice_table1-methods`'
   - title: Example data
     contents:
       - example_table1_data

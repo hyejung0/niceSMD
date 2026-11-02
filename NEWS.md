@@ -1,5 +1,10 @@
 # niceSMD (development)
 
+* New pkgdown website with a "Get started" vignette and articles (user guide,
+  tables by trial and treatment arm, Quarto/Word/PDF output). The user guide
+  moved from `inst/guides/user-guide.md` to `vignettes/articles/user-guide.Rmd`
+  with runnable code.
+
 * New `nice_trial_table1()`: descriptive summaries by trial and treatment arm
   for pooled individual participant data, with "wide" (trials side by side) and
   "long" (one row per trial and arm) layouts, optional within-trial SMDs, and
