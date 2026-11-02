@@ -1,0 +1,9 @@
+pandoc: 3.8.3
+pkgdown: 2.2.1
+pkgdown_sha: ~
+articles:
+  articles/user-guide: user-guide.html
+last_built: 2026-11-02T16:07Z
+urls:
+  reference: https://hyejung0.github.io/niceSMD/reference
+  article: https://hyejung0.github.io/niceSMD/articles
