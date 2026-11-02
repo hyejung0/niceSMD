@@ -201,30 +201,44 @@ doc <- flextable::body_add_flextable(doc, value = ft)
 print(doc, target = "Custom_document.docx")
 ```
 
-In a Quarto document with `format: docx`, place `tab$flextable` as the
-final expression of a code chunk. This embeds editable table cells,
-rather than a screen image. The exporter protects existing files unless
-`overwrite = TRUE`. Very wide tables may need landscape orientation and
-a smaller font.
+In a Quarto or R Markdown document, end a code chunk with `tab` (or
+`tab$flextable`) to render the formatted table. This embeds editable
+table cells, rather than a screen image. The exporter protects existing
+files unless `overwrite = TRUE`. Very wide tables may need landscape
+orientation and a smaller font.
 
 ## More help
 
+Full documentation is on the website:
+<https://hyejung0.github.io/niceSMD/>
+
+- [Get
+  started](https://hyejung0.github.io/niceSMD/articles/niceSMD.html)
+- [User
+  guide](https://hyejung0.github.io/niceSMD/articles/user-guide.html):
+  weights, survey designs, missing values, and SMD formulas
+- [Tables by trial and treatment
+  arm](https://hyejung0.github.io/niceSMD/articles/multi-trial-tables.html)
+- [Quarto, Word and PDF
+  output](https://hyejung0.github.io/niceSMD/articles/quarto-word-pdf.html)
+- [Function
+  reference](https://hyejung0.github.io/niceSMD/reference/index.html)
+
+Inside R:
+
 ``` r
 
-?nice_SMD_table1
-?save_table1_docx
-?table1_flextable
-system.file("doc", "user-guide.md", package = "niceSMD")
+vignette("niceSMD")          # Get started
+?nice_SMD_table1             # every argument, with examples
+?nice_trial_table1
 ```
 
-- [Complete user
-  guide](https://hyejung0.github.io/niceSMD/inst/doc/user-guide.md)
-- [Runnable
-  examples](https://hyejung0.github.io/niceSMD/inst/examples/quickstart.R)
-- [GitHub setup](https://hyejung0.github.io/niceSMD/GITHUB_SETUP.md)
-- [Development and
-  testing](https://hyejung0.github.io/niceSMD/DEVELOPMENT.md)
-- [Validation status](https://hyejung0.github.io/niceSMD/VALIDATION.md)
+Also in this repository: [runnable
+examples](https://hyejung0.github.io/niceSMD/inst/examples/quickstart.R),
+[GitHub setup](https://hyejung0.github.io/niceSMD/GITHUB_SETUP.md),
+[development and
+testing](https://hyejung0.github.io/niceSMD/DEVELOPMENT.md), and
+[validation status](https://hyejung0.github.io/niceSMD/VALIDATION.md).
 
 ## Changes from the original function
 
@@ -248,12 +262,16 @@ Hyejung Lee.
 
 ## Build tables
 
+Create a Table 1 with one absolute SMD per variable.
+
 - [`nice_SMD_table1()`](https://hyejung0.github.io/niceSMD/reference/nice_SMD_table1.md)
   : Descriptive Tables with One Absolute SMD per Variable
 - [`nice_trial_table1()`](https://hyejung0.github.io/niceSMD/reference/nice_trial_table1.md)
   : Descriptive Tables by Trial and Treatment Arm
 
 ## Format and export
+
+Print, render, style, and save tables.
 
 - [`table1_flextable()`](https://hyejung0.github.io/niceSMD/reference/table1_flextable.md)
   : Format an Editable Table 1
@@ -278,6 +296,11 @@ Hyejung Lee.
 
 # Articles
 
-### All vignettes
+### Guides
 
-- [user-guide](https://hyejung0.github.io/niceSMD/articles/user-guide.md):
+- [User
+  guide](https://hyejung0.github.io/niceSMD/articles/user-guide.md):
+- [Tables by trial and treatment
+  arm](https://hyejung0.github.io/niceSMD/articles/multi-trial-tables.md):
+- [Quarto, R Markdown, Word and PDF
+  output](https://hyejung0.github.io/niceSMD/articles/quarto-word-pdf.md):

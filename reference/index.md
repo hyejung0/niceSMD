@@ -2,12 +2,16 @@
 
 ## Build tables
 
+Create a Table 1 with one absolute SMD per variable.
+
 - [`nice_SMD_table1()`](https://hyejung0.github.io/niceSMD/reference/nice_SMD_table1.md)
   : Descriptive Tables with One Absolute SMD per Variable
 - [`nice_trial_table1()`](https://hyejung0.github.io/niceSMD/reference/nice_trial_table1.md)
   : Descriptive Tables by Trial and Treatment Arm
 
 ## Format and export
+
+Print, render, style, and save tables.
 
 - [`table1_flextable()`](https://hyejung0.github.io/niceSMD/reference/table1_flextable.md)
   : Format an Editable Table 1

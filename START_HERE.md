@@ -31,10 +31,10 @@ remotes::install_github("hyejung0/niceSMD")
 ```
 
 Read [README.md](https://hyejung0.github.io/niceSMD/README.md) for
-routine use and
-[inst/doc/user-guide.md](https://hyejung0.github.io/niceSMD/inst/doc/user-guide.md)
-for statistical conventions, survey designs, customization, and
-migration from the original function.
+routine use and the [user
+guide](https://hyejung0.github.io/niceSMD/articles/user-guide.html) for
+statistical conventions, survey designs, customization, and migration
+from the original function.
 
 **Validation status:** this package was assembled and statically
 inspected in an environment without R. R tests, `R CMD check`, and Word
