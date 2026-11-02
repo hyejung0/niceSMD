@@ -1,0 +1,20 @@
+url: https://hyejung0.github.io/niceSMD
+
+template:
+  bootstrap: 5
+
+reference:
+  - title: Build tables
+    contents:
+      - nice_SMD_table1
+      - nice_trial_table1
+  - title: Format and export
+    contents:
+      - table1_flextable
+      - table1_kable
+      - save_table1_docx
+      - nice_table1-methods
+  - title: Example data
+    contents:
+      - example_table1_data
+      - example_trial_data

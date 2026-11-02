@@ -9,3 +9,7 @@
 ^LICENSE\.md$
 ^tools$
 ^output$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^vignettes/articles$
