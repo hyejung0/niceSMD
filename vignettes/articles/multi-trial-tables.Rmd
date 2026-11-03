@@ -84,6 +84,28 @@ nice_trial_table1(d, "trial", "arm", vars, treatment_for_SMD = c("Placebo", "Act
                   show_smd = FALSE)
 ```
 
+## Without treatment arms, or with a pooled column
+
+Sometimes you want summaries by trial only, or by trial and arm plus a total.
+With `treatment = NULL` each trial is one column (or row) and no SMD is
+computed:
+
+```{r by-trial}
+nice_trial_table1(d, "trial", treatment = NULL, covar_names = vars,
+                  print_covariate_names = labels, notes = "short")
+```
+
+`overall = TRUE` adds a pooled summary of every participant in the displayed
+trials, ignoring trial and arm. The footnote says so, since pooling across
+trials ignores the trial structure.
+
+```{r overall-long}
+nice_trial_table1(d, "trial", "arm", vars, print_covariate_names = labels,
+                  treatment_for_SMD = c("Placebo", "Active"),
+                  layout = "long", continuous_stats = "mean_sd",
+                  overall = TRUE, notes = "short")
+```
+
 ## Weights, order, and export
 
 ```{r misc, eval = FALSE}

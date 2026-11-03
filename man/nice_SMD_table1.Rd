@@ -3,11 +3,12 @@
 \title{Descriptive Tables with One Absolute SMD per Variable}
 \usage{
 nice_SMD_table1(
-  dat = NULL, group, covar_names = NULL, print_covariate_names = NULL,
+  dat = NULL, group = NULL, covar_names = NULL, print_covariate_names = NULL,
   group_for_SMD = NULL, catDigits = 1, contDigits = 2, smdDigits = 3,
   categorical_vars = NULL, weights = NULL, design = NULL,
   weightDigits = 1, show_missing = TRUE, group_order = NULL,
-  title = "Table 1", docx_path = NULL, notes = "full"
+  title = "Table 1", docx_path = NULL, notes = "full",
+  overall = FALSE, overall_label = "Overall"
 )
 }
 \arguments{
@@ -22,7 +23,10 @@ nice_SMD_table1(
   \code{nrow(dat)} (for example \code{d$group}). Factors keep their level order
   for the display columns; other types use order of first appearance (override
   with \code{group_order}). Rows with a missing group value are excluded with a
-  warning. Empty strings are not allowed as group values.}
+  warning. Empty strings are not allowed as group values. With a grouping
+  variable at least two groups are required. \code{NULL} (the default) requests
+  \strong{overall summaries only}: one column for all included rows and no SMD
+  (see \code{overall_label}).}
 
   \item{covar_names}{Character vector of column names to summarize, in the order
   they should appear. Defaults to every column of \code{dat} other than the
@@ -40,7 +44,7 @@ nice_SMD_table1(
   contain punctuation such as \code{=} or parentheses; calculations never use
   labels as identifiers.}
 
-  \item{group_for_SMD}{Character vector of length two naming the two included
+  \item{group_for_SMD}{Ignored when \code{group = NULL}. Otherwise a character vector of length two naming the two included
   groups that the SMD compares, for example
   \code{c("Control", "Treatment")}. The SMD is reported as an absolute value, so
   the order only affects the column header and the notes. Defaults to the two
@@ -121,6 +125,17 @@ nice_SMD_table1(
   }
   The text is stored in \code{tab$notes} and is used by \code{print()},
   \code{\link{table1_flextable}}, and \code{\link{save_table1_docx}}.}
+
+  \item{overall}{\code{TRUE} or \code{FALSE} (default). With a grouping
+  variable, \code{TRUE} adds a first column, labelled \code{overall_label},
+  that summarizes every included row (all groups combined) next to the
+  group columns. The SMD still compares only \code{group_for_SMD}; the Overall
+  column does not enter it. Ignored when \code{group = NULL}, where the single
+  column is already the overall summary.}
+
+  \item{overall_label}{Heading of the overall column. Default \code{"Overall"}.
+  Must be one nonempty string and, when \code{overall = TRUE}, must differ from
+  the group names.}
 }
 \description{
 Creates continuous and categorical descriptive summaries for two or more groups,
@@ -323,7 +338,21 @@ nice_SMD_table1(
 file.exists(path)
 unlink(path)
 
-## ---- 12. Working with the result -------------------------------------
+## ---- 12. Overall summaries ----------------------------------------------
+## Overall column only: no groups, so no SMD.
+nice_SMD_table1(d, group = NULL, covar_names = c("age", "sex", "smoking"),
+                show_missing = "if_any", notes = "short")
+## Overall next to the groups (the usual Table 1 layout).
+with_overall <- nice_SMD_table1(
+  d, "group", c("age", "sex"), group_for_SMD = c("Control", "Treatment"),
+  overall = TRUE, overall_label = "All participants", notes = "short"
+)
+with_overall
+with_overall$groups        # first row is the pooled column
+## Weighted overall summary.
+nice_SMD_table1(d, NULL, c("age", "sex"), weights = "analysis_weight")
+
+## ---- 13. Working with the result -------------------------------------
 class(tab$flextable)       # an editable flextable object
 tab$groups                 # group sizes
 tab$settings$show_missing  # normalized show_missing setting

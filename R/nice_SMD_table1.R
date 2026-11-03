@@ -4,11 +4,12 @@
 #' Display labels never serve as variable identifiers.
 #' @export
 nice_SMD_table1 <- function(
-    dat = NULL, group, covar_names = NULL, print_covariate_names = NULL,
+    dat = NULL, group = NULL, covar_names = NULL, print_covariate_names = NULL,
     group_for_SMD = NULL, catDigits = 1, contDigits = 2, smdDigits = 3,
     categorical_vars = NULL, weights = NULL, design = NULL,
     weightDigits = 1, show_missing = TRUE, group_order = NULL,
-    title = "Table 1", docx_path = NULL, notes = "full") {
+    title = "Table 1", docx_path = NULL, notes = "full",
+    overall = FALSE, overall_label = "Overall") {
 
   weighted <- !is.null(weights) || !is.null(design)
   if (!is.null(weights) && !is.null(design)) {
@@ -53,10 +54,24 @@ nice_SMD_table1 <- function(
   if (!is.character(title) || length(title) != 1L || is.na(title)) {
     stop("title must be one character string.", call. = FALSE)
   }
+  if (!is.logical(overall) || length(overall) != 1L || is.na(overall)) {
+    stop("overall must be TRUE or FALSE.", call. = FALSE)
+  }
+  if (!is.character(overall_label) || length(overall_label) != 1L ||
+      is.na(overall_label) || !nzchar(overall_label)) {
+    stop("overall_label must be one nonempty character string.", call. = FALSE)
+  }
 
-  group_column <- if (is.character(group) && length(group) == 1L &&
+  # group = NULL requests overall summaries only: one column, no SMD.
+  overall_only <- is.null(group)
+  if (overall_only) {
+    overall <- FALSE
+    group_for_SMD <- NULL
+  }
+  group_column <- if (!overall_only && is.character(group) && length(group) == 1L &&
                        !is.na(group) && group %in% names(dat)) group else NULL
-  g <- if (!is.null(group_column)) dat[[group_column]] else group
+  g <- if (overall_only) rep(overall_label, nrow(dat)) else
+    if (!is.null(group_column)) dat[[group_column]] else group
   if (!is.atomic(g) || !is.null(dim(g)) || length(g) != nrow(dat)) {
     stop("group must be a column name or a vector of length nrow(dat).",
          call. = FALSE)
@@ -131,19 +146,24 @@ nice_SMD_table1 <- function(
       anyDuplicated(group_order) || !setequal(group_order, present)) {
     stop("group_order must list every included group exactly once.", call. = FALSE)
   }
-  if (length(group_order) < 2L) stop("At least two included groups are required.",
-                                   call. = FALSE)
-  if (is.null(group_for_SMD)) {
-    if (length(group_order) != 2L) {
-      stop("Specify group_for_SMD when more than two groups are displayed.",
-           call. = FALSE)
+  if (!overall_only) {
+    if (length(group_order) < 2L) stop("At least two included groups are required.",
+                                     call. = FALSE)
+    if (overall && overall_label %in% group_order) {
+      stop("overall_label must differ from the group names.", call. = FALSE)
     }
-    group_for_SMD <- group_order
-  }
-  group_for_SMD <- as.character(group_for_SMD)
-  if (length(group_for_SMD) != 2L || anyNA(group_for_SMD) ||
-      anyDuplicated(group_for_SMD) || any(!group_for_SMD %in% group_order)) {
-    stop("group_for_SMD must identify two distinct included groups.", call. = FALSE)
+    if (is.null(group_for_SMD)) {
+      if (length(group_order) != 2L) {
+        stop("Specify group_for_SMD when more than two groups are displayed.",
+             call. = FALSE)
+      }
+      group_for_SMD <- group_order
+    }
+    group_for_SMD <- as.character(group_for_SMD)
+    if (length(group_for_SMD) != 2L || anyNA(group_for_SMD) ||
+        anyDuplicated(group_for_SMD) || any(!group_for_SMD %in% group_order)) {
+      stop("group_for_SMD must identify two distinct included groups.", call. = FALSE)
+    }
   }
 
   # Fresh syntactic keys avoid formulas built from user column names or labels.
@@ -190,20 +210,23 @@ nice_SMD_table1 <- function(
     if (weighted) design$variables[[keys[j]]] <- work[[keys[j]]]
   }
   g <- as.character(work[[group_key]])
-  groups <- data.frame(group = group_order, n = integer(length(group_order)),
-                       sum_weights = numeric(length(group_order)),
-                       effective_n = numeric(length(group_order)),
+  # Displayed columns: optional pooled "Overall" first, then each group.
+  display_names <- c(if (overall) overall_label, group_order)
+  index_sets <- c(if (overall) list(seq_along(g)),
+                  lapply(group_order, function(level) which(g == level)))
+  groups <- data.frame(group = display_names, n = integer(length(display_names)),
+                       sum_weights = numeric(length(display_names)),
+                       effective_n = numeric(length(display_names)),
                        stringsAsFactors = FALSE)
-  for (k in seq_along(group_order)) {
-    wk <- w[g == group_order[k]]
+  for (k in seq_along(display_names)) {
+    wk <- w[index_sets[[k]]]
     groups$n[k] <- length(wk)
     groups$sum_weights[k] <- sum(wk)
     groups$effective_n[k] <- sum(wk)^2 / sum(wk^2)
   }
 
   summary_list <- lapply(seq_along(keys), function(j) {
-    lapply(group_order, function(level) {
-      idx <- which(g == level)
+    lapply(index_sets, function(idx) {
       v <- work[[keys[j]]][idx]
       observed <- !is.na(v)
       wi <- w[idx]
@@ -229,6 +252,10 @@ nice_SMD_table1 <- function(
                     smd = rep(NA_real_, length(keys)),
                     status = rep("not_estimable", length(keys)),
                     reason = rep("", length(keys)), stringsAsFactors = FALSE)
+  if (overall_only) {
+    smd$status[] <- "not_applicable"
+    smd$reason[] <- "A single group was summarized; no comparison was requested."
+  } else {
   pair_idx <- which(g %in% group_for_SMD)
   pair_work <- droplevels(work[pair_idx, , drop = FALSE])
   pair_design <- if (weighted) design[pair_idx, ] else NULL
@@ -236,7 +263,7 @@ nice_SMD_table1 <- function(
     for (nm in c(keys, group_key)) pair_design$variables[[nm]] <- pair_work[[nm]]
   }
   for (j in seq_along(keys)) {
-    pair_summaries <- summary_list[[j]][match(group_for_SMD, group_order)]
+    pair_summaries <- summary_list[[j]][match(group_for_SMD, display_names)]
     n_observed <- vapply(pair_summaries, function(z) z$n_observed, numeric(1))
     minimum <- if (categorical[j]) 1 else 2
     if (any(n_observed < minimum)) {
@@ -278,17 +305,19 @@ nice_SMD_table1 <- function(
     smd$status[j] <- if (is.na(smd$smd[j])) "not_estimable" else if
       (is.infinite(smd$smd[j])) "infinite" else "ok"
   }
+  }
 
   group_headers <- if (weighted) {
     paste0(groups$group, "\nn = ", groups$n, "; sum(w) = ",
            .nice_fmt(groups$sum_weights, weightDigits))
   } else paste0(groups$group, "\nN = ", groups$n)
-  smd_header <- paste0("SMD (", group_for_SMD[1L], " vs. ", group_for_SMD[2L], ")")
+  smd_header <- if (overall_only) NULL else
+    paste0("SMD (", group_for_SMD[1L], " vs. ", group_for_SMD[2L], ")")
   headers <- make.unique(c("Variable", group_headers, smd_header))
   rows <- list()
   info <- list()
   add_row <- function(label, values, smd_value, variable, type) {
-    rows[[length(rows) + 1L]] <<- c(label, values, smd_value)
+    rows[[length(rows) + 1L]] <<- c(label, values, if (!overall_only) smd_value)
     info[[length(info) + 1L]] <<- data.frame(variable = variable, type = type,
                                             stringsAsFactors = FALSE)
   }
@@ -298,7 +327,7 @@ nice_SMD_table1 <- function(
     z <- summary_list[[j]]
     smd_text <- if (is.na(smd$smd[j])) "NE" else if (is.infinite(smd$smd[j])) "Inf" else
       .nice_fmt(smd$smd[j], smdDigits)
-    add_row(labels[j], rep("", length(group_order)), smd_text, covar_names[j], "variable")
+    add_row(labels[j], rep("", length(display_names)), smd_text, covar_names[j], "variable")
     if (categorical[j]) {
       levs <- levels(work[[keys[j]]])
       for (level_index in seq_along(levs)) {
@@ -335,7 +364,7 @@ nice_SMD_table1 <- function(
   rownames(row_info) <- NULL
   notes_style <- notes
   notes <- .nice_notes(style = notes_style, weighted = weighted,
-                       comparison = group_for_SMD,
+                       comparison = group_for_SMD, overall = overall,
                        n_excluded = sum(!keep),
                        missing_mode = missing_mode,
                        n_hidden_missing = n_hidden_missing)
@@ -343,6 +372,8 @@ nice_SMD_table1 <- function(
                             row_info = row_info, notes = notes,
                             settings = list(weighted = weighted,
                               comparison = group_for_SMD, title = title,
+                              overall = overall, overall_only = overall_only,
+                              overall_label = overall_label,
                               exclusions = exclusions,
                               show_missing = missing_mode,
                               notes_style = notes_style,
@@ -441,12 +472,13 @@ nice_SMD_table1 <- function(
 }
 
 # Builds the footnote text. "full" documents every convention; "short" gives a
-# compact publication-style legend; "none" returns no notes.
+# compact publication-style legend; "none" returns no notes. comparison = NULL
+# means no SMD is displayed (overall-only table).
 .nice_notes <- function(style, weighted, comparison, n_excluded,
-                        missing_mode, n_hidden_missing) {
+                        missing_mode, n_hidden_missing, overall = FALSE) {
   if (style == "none") return(character(0))
-  pair <- paste0(comparison[1L], " and ", comparison[2L])
-  pair_vs <- paste0(comparison[1L], " vs. ", comparison[2L])
+  has_smd <- !is.null(comparison)
+  overall_note <- if (overall) "Overall = all included participants combined across groups."
   if (style == "short") {
     out <- c(
       if (weighted) {
@@ -458,8 +490,9 @@ nice_SMD_table1 <- function(
                "Continuous variables: mean (SD) and median (Q1, Q3). ",
                "Missing: n (% of group).")
       },
-      paste0("SMD = absolute standardized mean difference (", pair_vs,
-             "); NE = not estimable.")
+      if (has_smd) paste0("SMD = absolute standardized mean difference (",
+                          comparison[1L], " vs. ", comparison[2L], "); NE = not estimable."),
+      overall_note
     )
     if (missing_mode == "if_any" && n_hidden_missing > 0L) {
       out <- c(out, "Variables without a Missing row have no missing values.")
@@ -469,6 +502,7 @@ nice_SMD_table1 <- function(
     }
     return(out)
   }
+  pair <- if (has_smd) paste0(comparison[1L], " and ", comparison[2L])
   out <- c(
     if (weighted) {
       "n is the number of people with positive weights; sum(w) and category/missing counts are sums of weights. Weights are used as supplied, without normalization or trimming."
@@ -478,13 +512,20 @@ nice_SMD_table1 <- function(
     } else {
       "Category percentages use the nonmissing number of people for that variable and group. Missing percentages use the full group number of people."
     },
-    "Continuous summaries and SMDs exclude missing values separately for each variable. Missingness is not included as a category in SMDs.",
-    paste0("Absolute SMDs compare ", pair,
+    if (has_smd) {
+      "Continuous summaries and SMDs exclude missing values separately for each variable. Missingness is not included as a category in SMDs."
+    } else "Continuous summaries exclude missing values separately for each variable.",
+    if (has_smd) paste0("Absolute SMDs compare ", pair,
            ". A multilevel categorical SMD compares its category proportions jointly."),
     if (weighted) {
-      "Weighted SDs and SMDs follow survey/tableone conventions; weighted quartiles use survey::svyquantile with qrule = 'math'."
+      if (has_smd) {
+        "Weighted SDs and SMDs follow survey/tableone conventions; weighted quartiles use survey::svyquantile with qrule = 'math'."
+      } else "Weighted SDs follow survey conventions; weighted quartiles use survey::svyquantile with qrule = 'math'."
     } else "Unweighted quartiles use stats::quantile with type = 7.",
-    "NE = not estimable; Inf = a nonzero difference with zero standardizing variance; NA = an unavailable descriptive summary. Details are in the returned smd component."
+    if (has_smd) {
+      "NE = not estimable; Inf = a nonzero difference with zero standardizing variance; NA = an unavailable descriptive summary. Details are in the returned smd component."
+    } else "NA = an unavailable descriptive summary.",
+    overall_note
   )
   if (missing_mode == "if_any" && n_hidden_missing > 0L) {
     out <- c(out, "A Missing row is shown only for variables with at least one missing value; variables without one have no missing values in the included rows.")

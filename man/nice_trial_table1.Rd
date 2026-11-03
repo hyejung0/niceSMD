@@ -3,13 +3,13 @@
 \title{Descriptive Tables by Trial and Treatment Arm}
 \usage{
 nice_trial_table1(
-  dat, trial, treatment, covar_names = NULL, print_covariate_names = NULL,
+  dat, trial, treatment = NULL, covar_names = NULL, print_covariate_names = NULL,
   treatment_for_SMD = NULL, treatment_order = NULL, trial_order = NULL,
   layout = "wide", show_smd = TRUE, continuous_stats = "both",
   catDigits = 1, contDigits = 2, smdDigits = 3, categorical_vars = NULL,
   weights = NULL, weightDigits = 1, show_missing = "if_any",
   title = "Table 1 by trial and treatment", docx_path = NULL,
-  notes = "full"
+  notes = "full", overall = FALSE, overall_label = "Overall"
 )
 }
 \arguments{
@@ -27,7 +27,11 @@ nice_trial_table1(
   \item{treatment}{The treatment arm, given as a single column name or a vector
   of length \code{nrow(dat)}. Arms may differ between trials (for example a
   third arm in one trial). Rows with a missing treatment are excluded with a
-  warning. Trials with fewer than two arms are omitted with a warning.}
+  warning. Trials with fewer than two arms are omitted with a warning.
+  \code{NULL} (the default) requests \strong{summaries by trial only}: one
+  column (wide layout) or one row (long layout) per trial, with no arms and no
+  SMD. \code{treatment_for_SMD} and \code{treatment_order} then must not be
+  supplied.}
 
   \item{covar_names}{Character vector of columns to summarize, in display order.
   Defaults to all columns other than the trial, treatment, and weight columns
@@ -114,6 +118,16 @@ nice_trial_table1(
   \code{"none"}. The short legend gives the cell layout, the SMD definition
   and the compared pair, \code{NE}, and lines for excluded rows, hidden Missing
   rows, omitted trials, or em dashes when applicable.}
+
+  \item{overall}{\code{TRUE} or \code{FALSE} (default). Adds a pooled summary
+  of every included participant from the displayed trials, ignoring trial and
+  arm, as a last block (wide layout: a column headed \code{overall_label}; long
+  layout: a final row with Treatment \dQuote{All arms}). No SMD is computed for
+  it. Weights, if supplied, are applied as given. The footnotes state that the
+  pooled summary ignores the trial structure.}
+
+  \item{overall_label}{Heading of the pooled summary. Default \code{"Overall"}.
+  Must be one nonempty string that differs from every trial name.}
 }
 \description{
 Builds descriptive summaries separately for each trial and treatment arm from
@@ -122,7 +136,9 @@ trial-level surrogate endpoint studies. Each trial is summarized with
 \code{\link{nice_SMD_table1}}, so all conventions (denominators, missing values,
 weighting, SMDs) are identical; this function arranges the per-trial results
 into one table with a common set of rows. The result prints in the console,
-renders in Quarto and R Markdown, and exports to Word.
+renders in Quarto and R Markdown, and exports to Word. Summaries can also be
+requested by trial only (\code{treatment = NULL}) and with a pooled overall
+column or row (\code{overall = TRUE}), neither of which involves an SMD.
 }
 \details{
 Every statistic is computed within a trial and arm; nothing is pooled across
@@ -227,6 +243,18 @@ nice_trial_table1(d, "trial", "arm", "age",
                   treatment_for_SMD = c("Placebo", "Active"),
                   docx_path = path)
 unlink(path)
+
+## ---- 9. Overall summaries ---------------------------------------------
+## By trial only (no treatment): one column per trial, no SMD.
+nice_trial_table1(d, "trial", treatment = NULL, covar_names = vars,
+                  print_covariate_names = labels)
+## By trial and arm, plus a pooled column across all trials.
+nice_trial_table1(d, "trial", "arm", vars, print_covariate_names = labels,
+                  treatment_for_SMD = c("Placebo", "Active"),
+                  overall = TRUE, notes = "short")
+## Long layout: a final Overall row.
+nice_trial_table1(d, "trial", treatment = NULL, covar_names = vars,
+                  layout = "long", overall = TRUE, continuous_stats = "mean_sd")
 
 ## In Quarto, a chunk ending with `wide` renders the formatted table.
 }

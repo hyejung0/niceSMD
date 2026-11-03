@@ -1,5 +1,10 @@
 # niceSMD (development)
 
+* Overall summaries: `nice_SMD_table1(group = NULL)` gives a single Overall
+  column with no SMD; `overall = TRUE` (with `overall_label`) adds a pooled
+  column next to the groups. `nice_trial_table1(treatment = NULL)` summarizes
+  by trial only, and `overall = TRUE` adds a pooled column or row across trials.
+
 * New pkgdown website with a "Get started" vignette and articles (user guide,
   tables by trial and treatment arm, Quarto/Word/PDF output). The user guide
   moved from `inst/guides/user-guide.md` to `vignettes/articles/user-guide.Rmd`
