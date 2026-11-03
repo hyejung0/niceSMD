@@ -73,6 +73,8 @@ tab$groups                               # group sizes
 | Complex survey design | `design = survey::svydesign(...)` |
 | Fewer or more decimals | `contDigits`, `catDigits`, `smdDigits` |
 | Order of group columns | `group_order = c(...)` |
+| Overall summary only (no groups, no SMD) | `group = NULL` |
+| Add a pooled “Overall” column next to the groups | `overall = TRUE` |
 
 See
 [`?nice_SMD_table1`](https://hyejung0.github.io/niceSMD/reference/nice_SMD_table1.md)

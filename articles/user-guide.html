@@ -391,9 +391,178 @@ Missing group values are excluded with a warning and are not printed as
 a separate group.</p>
 </div>
 <div class="section level2">
+<h2 id="overall-summaries">Overall summaries<a class="anchor" aria-label="anchor" href="#overall-summaries"></a>
+</h2>
+<p>Without a grouping variable there is nothing to compare, so no SMD is
+produced. <code>group = NULL</code> gives a single “Overall” column; the
+notes drop the SMD definitions automatically:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/nice_SMD_table1.html">nice_SMD_table1</a></span><span class="op">(</span><span class="va">d</span>, group <span class="op">=</span> <span class="cn">NULL</span>, covar_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"smoking"</span><span class="op">)</span>,</span>
+<span>                show_missing <span class="op">=</span> <span class="st">"if_any"</span>, notes <span class="op">=</span> <span class="st">"short"</span><span class="op">)</span></span></code></pre></div>
+<div class="tabwid">
+<style>.cl-eefbcfb5{table-layout:auto;width:100%;}.cl-f21d2768{font-family:'Arial';font-size:10pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5bada2b9{font-family:'Arial';font-size:10pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-e3f94e90{font-family:'DejaVu Sans';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-d36ce3e7{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-f6367afb{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-cefd84f2{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:6pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-eb90ee20{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:6pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-a27d45e3{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:12pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-a87b1e2d{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-62599aa9{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:12pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-6477613b{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-8d8f1fc1{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-87f18ea9{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-d23b92fa{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ec3c27da{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-17786933{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5012c53f{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-23382aed{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-37c4dcc1{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e07d9bcc{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b91b9905{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-eefbcfb5">
+<thead><tr style="overflow-wrap:break-word;">
+<th class="cl-8d8f1fc1"><p class="cl-d36ce3e7"><span class="cl-f21d2768">Variable</span></p></th>
+<th class="cl-87f18ea9"><p class="cl-f6367afb"><span class="cl-f21d2768">Overall</span><br><span class="cl-f21d2768">N = 90</span></p></th>
+</tr></thead>
+<tbody>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-d23b92fa"><p class="cl-cefd84f2"><span class="cl-5bada2b9">age</span></p></td>
+<td class="cl-ec3c27da"><p class="cl-eb90ee20"><span class="cl-f21d2768"></span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Mean (SD)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">358.63 (183.94)</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Median (Q1, Q3)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">360.00 (200.50, 512.50)</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Missing</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">3 (3.3%)</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-d23b92fa"><p class="cl-cefd84f2"><span class="cl-5bada2b9">sex</span></p></td>
+<td class="cl-ec3c27da"><p class="cl-eb90ee20"><span class="cl-f21d2768"></span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Female</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">51 (58.6%)</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Male</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">36 (41.4%)</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Missing</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">3 (3.3%)</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-d23b92fa"><p class="cl-cefd84f2"><span class="cl-5bada2b9">smoking</span></p></td>
+<td class="cl-ec3c27da"><p class="cl-eb90ee20"><span class="cl-f21d2768"></span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Current</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">25 (28.7%)</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Former</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">23 (26.4%)</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Never</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">39 (44.8%)</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-23382aed"><p class="cl-62599aa9"><span class="cl-f21d2768">Missing</span></p></td>
+<td class="cl-37c4dcc1"><p class="cl-f6367afb"><span class="cl-f21d2768">3 (3.3%)</span></p></td>
+</tr>
+</tbody>
+<tfoot><tr style="overflow-wrap:break-word;"><td colspan="2" class="cl-e07d9bcc"><p class="cl-6477613b"><span class="cl-e3f94e90">Categorical variables: n (%) among nonmissing values. Continuous variables: mean (SD) and median (Q1, Q3). Missing: n (% of group).</span></p></td></tr></tfoot>
+</table>
+</div>
+<p>With a grouping variable, <code>overall = TRUE</code> adds a pooled
+column in front of the group columns, the usual Table 1 layout. The SMD
+still compares only <code>group_for_SMD</code>; the Overall column plays
+no part in it.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/nice_SMD_table1.html">nice_SMD_table1</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>,</span>
+<span>                group_for_SMD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Control"</span>, <span class="st">"Treatment"</span><span class="op">)</span>,</span>
+<span>                overall <span class="op">=</span> <span class="cn">TRUE</span>, overall_label <span class="op">=</span> <span class="st">"All participants"</span>,</span>
+<span>                notes <span class="op">=</span> <span class="st">"short"</span><span class="op">)</span></span></code></pre></div>
+<div class="tabwid">
+<style>.cl-eefbcfb5{table-layout:auto;width:100%;}.cl-f21d2768{font-family:'Arial';font-size:10pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5bada2b9{font-family:'Arial';font-size:10pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-e3f94e90{font-family:'DejaVu Sans';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-d36ce3e7{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-f6367afb{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-cefd84f2{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:6pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-eb90ee20{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:6pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-a27d45e3{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:12pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-a87b1e2d{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-62599aa9{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:12pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-6477613b{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-8d8f1fc1{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-87f18ea9{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c2169d3e{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-a47fdbec{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-d23b92fa{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ec3c27da{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-2fadd33e{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b1060a40{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-17786933{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5012c53f{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-de3631db{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-2c3f70b0{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-23382aed{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-37c4dcc1{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fab02936{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-84d83815{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-e07d9bcc{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b91b9905{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-98794ca2{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-dd06ad50{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-eefbcfb5">
+<thead><tr style="overflow-wrap:break-word;">
+<th class="cl-8d8f1fc1"><p class="cl-d36ce3e7"><span class="cl-f21d2768">Variable</span></p></th>
+<th class="cl-87f18ea9"><p class="cl-f6367afb"><span class="cl-f21d2768">All participants</span><br><span class="cl-f21d2768">N = 90</span></p></th>
+<th class="cl-c2169d3e"><p class="cl-f6367afb"><span class="cl-f21d2768">Control</span><br><span class="cl-f21d2768">N = 30</span></p></th>
+<th class="cl-87f18ea9"><p class="cl-f6367afb"><span class="cl-f21d2768">Treatment</span><br><span class="cl-f21d2768">N = 30</span></p></th>
+<th class="cl-87f18ea9"><p class="cl-f6367afb"><span class="cl-f21d2768">Registry</span><br><span class="cl-f21d2768">N = 30</span></p></th>
+<th class="cl-a47fdbec"><p class="cl-f6367afb"><span class="cl-f21d2768">SMD (Control vs. Treatment)</span></p></th>
+</tr></thead>
+<tbody>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-d23b92fa"><p class="cl-cefd84f2"><span class="cl-5bada2b9">age</span></p></td>
+<td class="cl-ec3c27da"><p class="cl-eb90ee20"><span class="cl-f21d2768"></span></p></td>
+<td class="cl-2fadd33e"><p class="cl-eb90ee20"><span class="cl-f21d2768"></span></p></td>
+<td class="cl-ec3c27da"><p class="cl-eb90ee20"><span class="cl-f21d2768"></span></p></td>
+<td class="cl-ec3c27da"><p class="cl-eb90ee20"><span class="cl-f21d2768"></span></p></td>
+<td class="cl-b1060a40"><p class="cl-eb90ee20"><span class="cl-f21d2768">3.451</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Mean (SD)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">358.63 (183.94)</span></p></td>
+<td class="cl-de3631db"><p class="cl-a87b1e2d"><span class="cl-f21d2768">147.28 (60.78)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">358.55 (61.66)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">570.07 (62.10)</span></p></td>
+<td class="cl-2c3f70b0"><p class="cl-a87b1e2d"><span class="cl-f21d2768"></span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Median (Q1, Q3)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">360.00 (200.50, 512.50)</span></p></td>
+<td class="cl-de3631db"><p class="cl-a87b1e2d"><span class="cl-f21d2768">148.00 (99.00, 197.00)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">360.00 (311.00, 409.00)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">572.00 (516.00, 621.00)</span></p></td>
+<td class="cl-2c3f70b0"><p class="cl-a87b1e2d"><span class="cl-f21d2768"></span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Missing</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">3 (3.3%)</span></p></td>
+<td class="cl-de3631db"><p class="cl-a87b1e2d"><span class="cl-f21d2768">1 (3.3%)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">1 (3.3%)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">1 (3.3%)</span></p></td>
+<td class="cl-2c3f70b0"><p class="cl-a87b1e2d"><span class="cl-f21d2768"></span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-d23b92fa"><p class="cl-cefd84f2"><span class="cl-5bada2b9">sex</span></p></td>
+<td class="cl-ec3c27da"><p class="cl-eb90ee20"><span class="cl-f21d2768"></span></p></td>
+<td class="cl-2fadd33e"><p class="cl-eb90ee20"><span class="cl-f21d2768"></span></p></td>
+<td class="cl-ec3c27da"><p class="cl-eb90ee20"><span class="cl-f21d2768"></span></p></td>
+<td class="cl-ec3c27da"><p class="cl-eb90ee20"><span class="cl-f21d2768"></span></p></td>
+<td class="cl-b1060a40"><p class="cl-eb90ee20"><span class="cl-f21d2768">0.000</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Female</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">51 (58.6%)</span></p></td>
+<td class="cl-de3631db"><p class="cl-a87b1e2d"><span class="cl-f21d2768">17 (58.6%)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">17 (58.6%)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">17 (58.6%)</span></p></td>
+<td class="cl-2c3f70b0"><p class="cl-a87b1e2d"><span class="cl-f21d2768"></span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-17786933"><p class="cl-a27d45e3"><span class="cl-f21d2768">Male</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">36 (41.4%)</span></p></td>
+<td class="cl-de3631db"><p class="cl-a87b1e2d"><span class="cl-f21d2768">12 (41.4%)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">12 (41.4%)</span></p></td>
+<td class="cl-5012c53f"><p class="cl-a87b1e2d"><span class="cl-f21d2768">12 (41.4%)</span></p></td>
+<td class="cl-2c3f70b0"><p class="cl-a87b1e2d"><span class="cl-f21d2768"></span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-23382aed"><p class="cl-62599aa9"><span class="cl-f21d2768">Missing</span></p></td>
+<td class="cl-37c4dcc1"><p class="cl-f6367afb"><span class="cl-f21d2768">3 (3.3%)</span></p></td>
+<td class="cl-fab02936"><p class="cl-f6367afb"><span class="cl-f21d2768">1 (3.3%)</span></p></td>
+<td class="cl-37c4dcc1"><p class="cl-f6367afb"><span class="cl-f21d2768">1 (3.3%)</span></p></td>
+<td class="cl-37c4dcc1"><p class="cl-f6367afb"><span class="cl-f21d2768">1 (3.3%)</span></p></td>
+<td class="cl-84d83815"><p class="cl-f6367afb"><span class="cl-f21d2768"></span></p></td>
+</tr>
+</tbody>
+<tfoot>
+<tr style="overflow-wrap:break-word;"><td colspan="6" class="cl-e07d9bcc"><p class="cl-d36ce3e7"><span class="cl-e3f94e90">Categorical variables: n (%) among nonmissing values. Continuous variables: mean (SD) and median (Q1, Q3). Missing: n (% of group).</span></p></td></tr>
+<tr style="overflow-wrap:break-word;"><td colspan="6" class="cl-e07d9bcc"><p class="cl-d36ce3e7"><span class="cl-e3f94e90">SMD = absolute standardized mean difference (Control vs. Treatment); NE = not estimable.</span></p></td></tr>
+<tr style="overflow-wrap:break-word;"><td colspan="6" class="cl-e07d9bcc"><p class="cl-6477613b"><span class="cl-e3f94e90">Overall = all included participants combined across groups.</span></p></td></tr>
+</tfoot>
+</table>
+</div>
+<p>Both work with weights, and <code>tab$groups</code> has a first row
+for the pooled column.</p>
+</div>
+<div class="section level2">
 <h2 id="nonnegative-analysis-weights">Nonnegative analysis weights<a class="anchor" aria-label="anchor" href="#nonnegative-analysis-weights"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">weighted</span> <span class="op">&lt;-</span> <span class="fu">niceSMD</span><span class="fu">::</span><span class="fu"><a href="../reference/nice_SMD_table1.html">nice_SMD_table1</a></span><span class="op">(</span></span>
 <span>  <span class="va">d</span>, <span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"smoking"</span><span class="op">)</span>,</span>
 <span>  weights <span class="op">=</span> <span class="st">"analysis_weight"</span>,</span>
@@ -542,7 +711,7 @@ stratification.</p>
 </h2>
 <p>For complex survey data, supply the actual design instead of just a
 vector:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu">survey</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survey/man/svydesign.html" class="external-link">svydesign</a></span><span class="op">(</span></span>
 <span>  ids <span class="op">=</span> <span class="op">~</span><span class="va">cluster</span>, strata <span class="op">=</span> <span class="op">~</span><span class="va">stratum</span>,</span>
 <span>  weights <span class="op">=</span> <span class="op">~</span><span class="va">analysis_weight</span>, data <span class="op">=</span> <span class="va">d</span></span>
@@ -743,14 +912,14 @@ reasons</td>
 </table>
 <p><code>as.data.frame(tab)</code> returns <code>tab$table</code>. To
 select SMDs numerically:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tab</span><span class="op">$</span><span class="va">smd</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">tab</span><span class="op">$</span><span class="va">smd</span><span class="op">$</span><span class="va">smd</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">tab</span><span class="op">$</span><span class="va">smd</span><span class="op">$</span><span class="va">smd</span> <span class="op">&gt;</span> <span class="fl">0.1</span>, <span class="op">]</span></span>
 <span><span class="co">#&gt;   variable label      smd status reason</span></span>
 <span><span class="co">#&gt; 1      age   age 3.451033     ok</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">tab</span><span class="op">$</span><span class="va">smd</span>, <span class="st">"numeric_SMDs.csv"</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>To customize the editable table:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ft</span> <span class="op">&lt;-</span> <span class="fu">niceSMD</span><span class="fu">::</span><span class="fu"><a href="../reference/table1_flextable.html">table1_flextable</a></span><span class="op">(</span><span class="va">tab</span>, font_size <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span>
 <span><span class="va">ft</span> <span class="op">&lt;-</span> <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/bg.html" class="external-link">bg</a></span><span class="op">(</span><span class="va">ft</span>, part <span class="op">=</span> <span class="st">"header"</span>, bg <span class="op">=</span> <span class="st">"#EAF0F4"</span><span class="op">)</span></span>
 <span><span class="va">ft</span> <span class="op">&lt;-</span> <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/color.html" class="external-link">color</a></span><span class="op">(</span><span class="va">ft</span>, part <span class="op">=</span> <span class="st">"header"</span>, color <span class="op">=</span> <span class="st">"#243746"</span><span class="op">)</span></span>
@@ -833,7 +1002,7 @@ select SMDs numerically:</p>
 </tfoot>
 </table>
 </div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/save_as_docx.html" class="external-link">save_as_docx</a></span><span class="op">(</span>`Participant characteristics` <span class="op">=</span> <span class="va">ft</span>,</span>
 <span>                        path <span class="op">=</span> <span class="st">"Customized_Table1.docx"</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/save_table1_docx.html">save_table1_docx()</a></code> rebuilds the table from the object’s

@@ -79,6 +79,37 @@ values. The pair must contain two distinct included groups. Missing
 group values are excluded with a warning and are not printed as a
 separate group.
 
+## Overall summaries
+
+Without a grouping variable there is nothing to compare, so no SMD is
+produced. `group = NULL` gives a single “Overall” column; the notes drop
+the SMD definitions automatically:
+
+``` r
+
+nice_SMD_table1(d, group = NULL, covar_names = c("age", "sex", "smoking"),
+                show_missing = "if_any", notes = "short")
+```
+
+[TABLE]
+
+With a grouping variable, `overall = TRUE` adds a pooled column in front
+of the group columns, the usual Table 1 layout. The SMD still compares
+only `group_for_SMD`; the Overall column plays no part in it.
+
+``` r
+
+nice_SMD_table1(d, "group", c("age", "sex"),
+                group_for_SMD = c("Control", "Treatment"),
+                overall = TRUE, overall_label = "All participants",
+                notes = "short")
+```
+
+[TABLE]
+
+Both work with weights, and `tab$groups` has a first row for the pooled
+column.
+
 ## Nonnegative analysis weights
 
 ``` r

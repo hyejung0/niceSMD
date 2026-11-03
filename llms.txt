@@ -130,6 +130,23 @@ names, indented levels, footnotes) in HTML, Word, and PDF output. Use
 `table1_flextable(tab, font_size = 9)` to control size and fonts, or
 `table1_kable(tab)` as a lightweight fallback for PDF.
 
+## Overall summaries (no stratification)
+
+``` r
+
+# One Overall column, no SMD
+nice_SMD_table1(d, group = NULL, covar_names = c("age", "sex"))
+
+# Overall column next to the groups
+nice_SMD_table1(d, "group", c("age", "sex"),
+                group_for_SMD = c("Control", "Treatment"), overall = TRUE)
+
+# By trial only, or by trial and arm plus a pooled column
+nice_trial_table1(example_trial_data(), "trial", treatment = NULL, covar_names = c("age", "sex"))
+nice_trial_table1(example_trial_data(), "trial", "arm", c("age", "sex"),
+                  treatment_for_SMD = c("Placebo", "Active"), overall = TRUE)
+```
+
 ## Several trials: summaries by trial and treatment
 
 For pooled individual participant data from multiple trials,

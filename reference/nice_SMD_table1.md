@@ -12,11 +12,12 @@ exports to editable Word tables.
 
 ``` r
 nice_SMD_table1(
-  dat = NULL, group, covar_names = NULL, print_covariate_names = NULL,
+  dat = NULL, group = NULL, covar_names = NULL, print_covariate_names = NULL,
   group_for_SMD = NULL, catDigits = 1, contDigits = 2, smdDigits = 3,
   categorical_vars = NULL, weights = NULL, design = NULL,
   weightDigits = 1, show_missing = TRUE, group_order = NULL,
-  title = "Table 1", docx_path = NULL, notes = "full"
+  title = "Table 1", docx_path = NULL, notes = "full",
+  overall = FALSE, overall_label = "Overall"
 )
 ```
 
@@ -37,7 +38,10 @@ nice_SMD_table1(
   (for example `d$group`). Factors keep their level order for the
   display columns; other types use order of first appearance (override
   with `group_order`). Rows with a missing group value are excluded with
-  a warning. Empty strings are not allowed as group values.
+  a warning. Empty strings are not allowed as group values. With a
+  grouping variable at least two groups are required. `NULL` (the
+  default) requests **overall summaries only**: one column for all
+  included rows and no SMD (see `overall_label`).
 
 - covar_names:
 
@@ -61,12 +65,13 @@ nice_SMD_table1(
 
 - group_for_SMD:
 
-  Character vector of length two naming the two included groups that the
-  SMD compares, for example `c("Control", "Treatment")`. The SMD is
-  reported as an absolute value, so the order only affects the column
-  header and the notes. Defaults to the two displayed groups when
-  exactly two groups are present; required when more than two groups are
-  displayed. All displayed groups still receive summaries.
+  Ignored when `group = NULL`. Otherwise a character vector of length
+  two naming the two included groups that the SMD compares, for example
+  `c("Control", "Treatment")`. The SMD is reported as an absolute value,
+  so the order only affects the column header and the notes. Defaults to
+  the two displayed groups when exactly two groups are present; required
+  when more than two groups are displayed. All displayed groups still
+  receive summaries.
 
 - catDigits:
 
@@ -172,6 +177,21 @@ nice_SMD_table1(
   [`table1_flextable`](https://hyejung0.github.io/niceSMD/reference/table1_flextable.md),
   and
   [`save_table1_docx`](https://hyejung0.github.io/niceSMD/reference/save_table1_docx.md).
+
+- overall:
+
+  `TRUE` or `FALSE` (default). With a grouping variable, `TRUE` adds a
+  first column, labelled `overall_label`, that summarizes every included
+  row (all groups combined) next to the group columns. The SMD still
+  compares only `group_for_SMD`; the Overall column does not enter it.
+  Ignored when `group = NULL`, where the single column is already the
+  overall summary.
+
+- overall_label:
+
+  Heading of the overall column. Default `"Overall"`. Must be one
+  nonempty string and, when `overall = TRUE`, must differ from the group
+  names.
 
 ## Details
 
@@ -731,7 +751,85 @@ file.exists(path)
 #> [1] TRUE
 unlink(path)
 
-## ---- 12. Working with the result -------------------------------------
+## ---- 12. Overall summaries ----------------------------------------------
+## Overall column only: no groups, so no SMD.
+nice_SMD_table1(d, group = NULL, covar_names = c("age", "sex", "smoking"),
+                show_missing = "if_any", notes = "short")
+#> Table 1
+#> 
+#>  Variable            Overall\nN = 90        
+#>  age                                        
+#>      Mean (SD)       358.63 (183.94)        
+#>      Median (Q1, Q3) 360.00 (200.50, 512.50)
+#>      Missing         3 (3.3%)               
+#>  sex                                        
+#>      Female          51 (58.6%)             
+#>      Male            36 (41.4%)             
+#>      Missing         3 (3.3%)               
+#>  smoking                                    
+#>      Current         25 (28.7%)             
+#>      Former          23 (26.4%)             
+#>      Never           39 (44.8%)             
+#>      Missing         3 (3.3%)               
+#> 
+#> Categorical variables: n (%) among nonmissing values. Continuous variables: mean (SD) and median (Q1, Q3). Missing: n (% of group).
+## Overall next to the groups (the usual Table 1 layout).
+with_overall <- nice_SMD_table1(
+  d, "group", c("age", "sex"), group_for_SMD = c("Control", "Treatment"),
+  overall = TRUE, overall_label = "All participants", notes = "short"
+)
+with_overall
+#> Table 1
+#> 
+#>  Variable            All participants\nN = 90 Control\nN = 30       
+#>  age                                                                
+#>      Mean (SD)       358.63 (183.94)          147.28 (60.78)        
+#>      Median (Q1, Q3) 360.00 (200.50, 512.50)  148.00 (99.00, 197.00)
+#>      Missing         3 (3.3%)                 1 (3.3%)              
+#>  sex                                                                
+#>      Female          51 (58.6%)               17 (58.6%)            
+#>      Male            36 (41.4%)               12 (41.4%)            
+#>      Missing         3 (3.3%)                 1 (3.3%)              
+#>  Treatment\nN = 30       Registry\nN = 30        SMD (Control vs. Treatment)
+#>                                                  3.451                      
+#>  358.55 (61.66)          570.07 (62.10)                                     
+#>  360.00 (311.00, 409.00) 572.00 (516.00, 621.00)                            
+#>  1 (3.3%)                1 (3.3%)                                           
+#>                                                  0.000                      
+#>  17 (58.6%)              17 (58.6%)                                         
+#>  12 (41.4%)              12 (41.4%)                                         
+#>  1 (3.3%)                1 (3.3%)                                           
+#> 
+#> Categorical variables: n (%) among nonmissing values. Continuous variables: mean (SD) and median (Q1, Q3). Missing: n (% of group).
+#> SMD = absolute standardized mean difference (Control vs. Treatment); NE = not estimable.
+#> Overall = all included participants combined across groups.
+with_overall$groups        # first row is the pooled column
+#>              group  n sum_weights effective_n
+#> 1 All participants 90          90          90
+#> 2          Control 30          30          30
+#> 3        Treatment 30          30          30
+#> 4         Registry 30          30          30
+## Weighted overall summary.
+nice_SMD_table1(d, NULL, c("age", "sex"), weights = "analysis_weight")
+#> Table 1
+#> 
+#>  Variable            Overall\nn = 90; sum(w) = 4549.5
+#>  age                                                 
+#>      Mean (SD)       461.05 (152.63)                 
+#>      Median (Q1, Q3) 488.00 (353.00, 593.00)         
+#>      Missing         122.5 (2.7%)                    
+#>  sex                                                 
+#>      Female          2613.8 (59.0%)                  
+#>      Male            1819.8 (41.0%)                  
+#>      Missing         115.9 (2.5%)                    
+#> 
+#> n is the number of people with positive weights; sum(w) and category/missing counts are sums of weights. Weights are used as supplied, without normalization or trimming.
+#> Category percentages use the nonmissing sum of weights for that variable and group. Missing percentages use the full group sum of weights.
+#> Continuous summaries exclude missing values separately for each variable.
+#> Weighted SDs follow survey conventions; weighted quartiles use survey::svyquantile with qrule = 'math'.
+#> NA = an unavailable descriptive summary.
+
+## ---- 13. Working with the result -------------------------------------
 class(tab$flextable)       # an editable flextable object
 #> [1] "flextable"
 tab$groups                 # group sizes

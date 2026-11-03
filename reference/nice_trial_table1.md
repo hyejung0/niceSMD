@@ -8,19 +8,21 @@ with
 so all conventions (denominators, missing values, weighting, SMDs) are
 identical; this function arranges the per-trial results into one table
 with a common set of rows. The result prints in the console, renders in
-Quarto and R Markdown, and exports to Word.
+Quarto and R Markdown, and exports to Word. Summaries can also be
+requested by trial only (`treatment = NULL`) and with a pooled overall
+column or row (`overall = TRUE`), neither of which involves an SMD.
 
 ## Usage
 
 ``` r
 nice_trial_table1(
-  dat, trial, treatment, covar_names = NULL, print_covariate_names = NULL,
+  dat, trial, treatment = NULL, covar_names = NULL, print_covariate_names = NULL,
   treatment_for_SMD = NULL, treatment_order = NULL, trial_order = NULL,
   layout = "wide", show_smd = TRUE, continuous_stats = "both",
   catDigits = 1, contDigits = 2, smdDigits = 3, categorical_vars = NULL,
   weights = NULL, weightDigits = 1, show_missing = "if_any",
   title = "Table 1 by trial and treatment", docx_path = NULL,
-  notes = "full"
+  notes = "full", overall = FALSE, overall_label = "Overall"
 )
 ```
 
@@ -47,6 +49,10 @@ nice_trial_table1(
   `nrow(dat)`. Arms may differ between trials (for example a third arm
   in one trial). Rows with a missing treatment are excluded with a
   warning. Trials with fewer than two arms are omitted with a warning.
+  `NULL` (the default) requests **summaries by trial only**: one column
+  (wide layout) or one row (long layout) per trial, with no arms and no
+  SMD. `treatment_for_SMD` and `treatment_order` then must not be
+  supplied.
 
 - covar_names:
 
@@ -174,6 +180,20 @@ nice_trial_table1(
   legend gives the cell layout, the SMD definition and the compared
   pair, `NE`, and lines for excluded rows, hidden Missing rows, omitted
   trials, or em dashes when applicable.
+
+- overall:
+
+  `TRUE` or `FALSE` (default). Adds a pooled summary of every included
+  participant from the displayed trials, ignoring trial and arm, as a
+  last block (wide layout: a column headed `overall_label`; long layout:
+  a final row with Treatment “All arms”). No SMD is computed for it.
+  Weights, if supplied, are applied as given. The footnotes state that
+  the pooled summary ignores the trial structure.
+
+- overall_label:
+
+  Heading of the pooled summary. Default `"Overall"`. Must be one
+  nonempty string that differs from every trial name.
 
 ## Details
 
@@ -369,7 +389,7 @@ wide$groups                  # arm sizes
 #> 6 Trial C    Active 24          24          24
 #> 7 Trial C High dose 24          24          24
 wide$trials[["Trial A"]]     # the underlying single-trial table
-#> Trial A
+#> Trial 'Trial A'
 #> 
 #>  Variable              Placebo\nN = 30      Active\nN = 30      
 #>  Age (years)                                                    
@@ -642,8 +662,8 @@ nice_trial_table1(
 #> 
 #> All summaries are computed separately within each trial and treatment arm.
 #> n is the number of people with positive weights; counts are sums of weights, used as supplied without normalization or trimming. Category percentages use the nonmissing sum of weights for that variable and arm; missing percentages use the full arm sum of weights.
-#> Continuous summaries and SMDs exclude missing values separately for each variable and trial. Missingness is not included as a category in SMDs.
-#> Weighted SDs and SMDs follow survey/tableone conventions; weighted quartiles use survey::svyquantile with qrule = 'math'.
+#> Continuous summaries exclude missing values separately for each variable and trial.
+#> Weighted SDs follow survey conventions; weighted quartiles use survey::svyquantile with qrule = 'math'.
 #> A Missing row is shown only for variables with at least one missing value in some trial.
 
 ## ---- 8. Word output ------------------------------------------------------
@@ -687,6 +707,190 @@ nice_trial_table1(d, "trial", "arm", "age",
 #> Absolute SMDs compare Placebo vs. Active within each trial. A multilevel categorical SMD compares its category proportions jointly. NE = not estimable; Inf = a nonzero difference with zero standardizing variance. SMDs are descriptive and are not tests.
 #> Unweighted quartiles use stats::quantile with type = 7.
 unlink(path)
+
+## ---- 9. Overall summaries ---------------------------------------------
+## By trial only (no treatment): one column per trial, no SMD.
+nice_trial_table1(d, "trial", treatment = NULL, covar_names = vars,
+                  print_covariate_names = labels)
+#> Table 1 by trial
+#> 
+#>  Variable              Trial A: N = 60      Trial B: N = 48     
+#>  Age (years)                                                    
+#>      Mean (SD)         63.37 (8.82)         66.85 (9.02)        
+#>      Median (Q1, Q3)   63.00 (56.00, 70.50) 67.00 (59.00, 74.00)
+#>      Missing           1 (1.7%)             1 (2.1%)            
+#>  eGFR (mL/min/1.73 m2)                                          
+#>      Mean (SD)         39.66 (5.75)         42.90 (5.77)        
+#>      Median (Q1, Q3)   39.50 (34.75, 44.25) 43.00 (38.25, 47.75)
+#>      Missing           1 (1.7%)             1 (2.1%)            
+#>  Sex                                                            
+#>      Female            24 (40.0%)           20 (41.7%)          
+#>      Male              36 (60.0%)           28 (58.3%)          
+#>  Diabetes                                                       
+#>      No                34 (56.7%)           28 (58.3%)          
+#>      Yes               26 (43.3%)           20 (41.7%)          
+#>  CKD stage                                                      
+#>      G3                40 (66.7%)           20 (41.7%)          
+#>      G4                20 (33.3%)           19 (39.6%)          
+#>      G5                0 (0.0%)             9 (18.8%)           
+#>  Trial C: N = 72     
+#>                      
+#>  60.94 (8.89)        
+#>  61.00 (53.50, 68.00)
+#>  1 (1.4%)            
+#>                      
+#>  37.92 (5.76)        
+#>  38.00 (33.00, 43.00)
+#>  0 (0.0%)            
+#>                      
+#>  29 (40.3%)          
+#>  43 (59.7%)          
+#>                      
+#>  41 (56.9%)          
+#>  31 (43.1%)          
+#>                      
+#>  29 (40.3%)          
+#>  29 (40.3%)          
+#>  14 (19.4%)          
+#> 
+#> All summaries are computed separately within each trial.
+#> N and counts are numbers of people. Category percentages use the nonmissing number of people for that variable and trial; missing percentages use the full trial number of people.
+#> Continuous summaries exclude missing values separately for each variable and trial.
+#> Unweighted quartiles use stats::quantile with type = 7.
+#> A Missing row is shown only for variables with at least one missing value in some trial.
+## By trial and arm, plus a pooled column across all trials.
+nice_trial_table1(d, "trial", "arm", vars, print_covariate_names = labels,
+                  treatment_for_SMD = c("Placebo", "Active"),
+                  overall = TRUE, notes = "short")
+#> Table 1 by trial and treatment
+#> 
+#>  Variable              Trial A: Placebo\nN = 30 Trial A: Active\nN = 30
+#>  Age (years)                                                           
+#>      Mean (SD)         62.70 (9.09)             64.07 (8.63)           
+#>      Median (Q1, Q3)   62.50 (55.25, 69.75)     64.00 (57.00, 71.00)   
+#>      Missing           0 (0.0%)                 1 (3.3%)               
+#>  eGFR (mL/min/1.73 m2)                                                 
+#>      Mean (SD)         39.67 (5.86)             39.66 (5.75)           
+#>      Median (Q1, Q3)   39.50 (34.75, 44.25)     40.00 (35.00, 44.00)   
+#>      Missing           0 (0.0%)                 1 (3.3%)               
+#>  Sex                                                                   
+#>      Female            12 (40.0%)               12 (40.0%)             
+#>      Male              18 (60.0%)               18 (60.0%)             
+#>  Diabetes                                                              
+#>      No                18 (60.0%)               16 (53.3%)             
+#>      Yes               12 (40.0%)               14 (46.7%)             
+#>  CKD stage                                                             
+#>      G3                20 (66.7%)               20 (66.7%)             
+#>      G4                10 (33.3%)               10 (33.3%)             
+#>      G5                0 (0.0%)                 0 (0.0%)               
+#>  Trial A: SMD (Placebo vs. Active) Trial B: Placebo\nN = 24
+#>  0.154                                                     
+#>                                    65.29 (8.89)            
+#>                                    65.50 (57.75, 72.25)    
+#>                                    0 (0.0%)                
+#>  0.002                                                     
+#>                                    43.67 (5.80)            
+#>                                    43.50 (39.00, 49.00)    
+#>                                    1 (4.2%)                
+#>  0.000                                                     
+#>                                    10 (41.7%)              
+#>                                    14 (58.3%)              
+#>  0.135                                                     
+#>                                    15 (62.5%)              
+#>                                    9 (37.5%)               
+#>  0.000                                                     
+#>                                    10 (41.7%)              
+#>                                    10 (41.7%)              
+#>                                    4 (16.7%)               
+#>  Trial B: Active\nN = 24 Trial B: SMD (Placebo vs. Active)
+#>                          0.355                            
+#>  68.48 (9.05)                                             
+#>  68.00 (62.50, 76.50)                                     
+#>  1 (4.2%)                                                 
+#>                          0.261                            
+#>  42.17 (5.76)                                             
+#>  42.50 (37.00, 46.25)                                     
+#>  0 (0.0%)                                                 
+#>                          0.000                            
+#>  10 (41.7%)                                               
+#>  14 (58.3%)                                               
+#>                          0.170                            
+#>  13 (54.2%)                                               
+#>  11 (45.8%)                                               
+#>                          0.117                            
+#>  10 (41.7%)                                               
+#>  9 (37.5%)                                                
+#>  5 (20.8%)                                                
+#>  Trial C: Placebo\nN = 24 Trial C: Active\nN = 24 Trial C: High dose\nN = 24
+#>                                                                             
+#>  60.04 (9.00)             62.25 (9.23)            60.50 (8.66)              
+#>  59.00 (53.50, 67.50)     62.50 (54.75, 69.00)    60.50 (52.75, 68.25)      
+#>  1 (4.2%)                 0 (0.0%)                0 (0.0%)                  
+#>                                                                             
+#>  37.42 (5.83)             37.92 (5.75)            38.42 (5.90)              
+#>  37.00 (32.88, 42.25)     38.25 (33.25, 42.25)    38.50 (33.75, 43.62)      
+#>  0 (0.0%)                 0 (0.0%)                0 (0.0%)                  
+#>                                                                             
+#>  9 (37.5%)                10 (41.7%)              10 (41.7%)                
+#>  15 (62.5%)               14 (58.3%)              14 (58.3%)                
+#>                                                                             
+#>  13 (54.2%)               14 (58.3%)              14 (58.3%)                
+#>  11 (45.8%)               10 (41.7%)              10 (41.7%)                
+#>                                                                             
+#>  9 (37.5%)                10 (41.7%)              10 (41.7%)                
+#>  10 (41.7%)               10 (41.7%)              9 (37.5%)                 
+#>  5 (20.8%)                4 (16.7%)               5 (20.8%)                 
+#>  Trial C: SMD (Placebo vs. Active) Overall: N = 180    
+#>  0.242                                                 
+#>                                    63.32 (9.16)        
+#>                                    63.00 (56.00, 71.00)
+#>                                    3 (1.7%)            
+#>  0.086                                                 
+#>                                    39.81 (6.07)        
+#>                                    39.75 (35.00, 44.50)
+#>                                    2 (1.1%)            
+#>  0.085                                                 
+#>                                    73 (40.6%)          
+#>                                    107 (59.4%)         
+#>  0.084                                                 
+#>                                    103 (57.2%)         
+#>                                    77 (42.8%)          
+#>  0.117                                                 
+#>                                    89 (49.4%)          
+#>                                    68 (37.8%)          
+#>                                    23 (12.8%)          
+#> 
+#> Summaries are computed within each trial and treatment arm. Categorical: n (%) among nonmissing values. Continuous: mean (SD) and median (Q1, Q3). Missing: n (% of arm).
+#> SMD = absolute standardized mean difference (Placebo vs. Active); NE = not estimable.
+#> Overall = all participants pooled across trials and treatment arms, ignoring the trial structure.
+#> A Missing row is shown only for variables with at least one missing value in some trial.
+## Long layout: a final Overall row.
+nice_trial_table1(d, "trial", treatment = NULL, covar_names = vars,
+                  layout = "long", overall = TRUE, continuous_stats = "mean_sd")
+#> Table 1 by trial
+#> 
+#>  Trial   N   age: Mean (SD) age: Missing egfr: Mean (SD) egfr: Missing
+#>  Trial A 60  63.37 (8.82)   1 (1.7%)     39.66 (5.75)    1 (1.7%)     
+#>  Trial B 48  66.85 (9.02)   1 (2.1%)     42.90 (5.77)    1 (2.1%)     
+#>  Trial C 72  60.94 (8.89)   1 (1.4%)     37.92 (5.76)    0 (0.0%)     
+#>  Overall 180 63.32 (9.16)   3 (1.7%)     39.81 (6.07)    2 (1.1%)     
+#>  sex: Female sex: Male   diabetes: No diabetes: Yes ckd_stage: G3 ckd_stage: G4
+#>  24 (40.0%)  36 (60.0%)  34 (56.7%)   26 (43.3%)    40 (66.7%)    20 (33.3%)   
+#>  20 (41.7%)  28 (58.3%)  28 (58.3%)   20 (41.7%)    20 (41.7%)    19 (39.6%)   
+#>  29 (40.3%)  43 (59.7%)  41 (56.9%)   31 (43.1%)    29 (40.3%)    29 (40.3%)   
+#>  73 (40.6%)  107 (59.4%) 103 (57.2%)  77 (42.8%)    89 (49.4%)    68 (37.8%)   
+#>  ckd_stage: G5
+#>  0 (0.0%)     
+#>  9 (18.8%)    
+#>  14 (19.4%)   
+#>  23 (12.8%)   
+#> 
+#> All summaries are computed separately within each trial.
+#> N and counts are numbers of people. Category percentages use the nonmissing number of people for that variable and trial; missing percentages use the full trial number of people.
+#> Continuous summaries exclude missing values separately for each variable and trial.
+#> Unweighted quartiles use stats::quantile with type = 7.
+#> Overall = all participants pooled across trials, ignoring the trial structure.
+#> A Missing row is shown only for variables with at least one missing value in some trial.
 
 ## In Quarto, a chunk ending with `wide` renders the formatted table.
 ```

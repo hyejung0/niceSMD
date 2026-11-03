@@ -239,10 +239,26 @@
 <p>A chunk that ends with <code>tab</code> renders the formatted table (bold variable names, indented levels, footnotes) in HTML, Word, and PDF output. Use <code>table1_flextable(tab, font_size = 9)</code> to control size and fonts, or <code>table1_kable(tab)</code> as a lightweight fallback for PDF.</p>
 </div>
 <div class="section level2">
+<h2 id="overall-summaries-no-stratification">Overall summaries (no stratification)<a class="anchor" aria-label="anchor" href="#overall-summaries-no-stratification"></a>
+</h2>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># One Overall column, no SMD</span></span>
+<span><span class="fu"><a href="reference/nice_SMD_table1.html">nice_SMD_table1</a></span><span class="op">(</span><span class="va">d</span>, group <span class="op">=</span> <span class="cn">NULL</span>, covar_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Overall column next to the groups</span></span>
+<span><span class="fu"><a href="reference/nice_SMD_table1.html">nice_SMD_table1</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>,</span>
+<span>                group_for_SMD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Control"</span>, <span class="st">"Treatment"</span><span class="op">)</span>, overall <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># By trial only, or by trial and arm plus a pooled column</span></span>
+<span><span class="fu"><a href="reference/nice_trial_table1.html">nice_trial_table1</a></span><span class="op">(</span><span class="fu"><a href="reference/example_trial_data.html">example_trial_data</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"trial"</span>, treatment <span class="op">=</span> <span class="cn">NULL</span>, covar_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/nice_trial_table1.html">nice_trial_table1</a></span><span class="op">(</span><span class="fu"><a href="reference/example_trial_data.html">example_trial_data</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"trial"</span>, <span class="st">"arm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>,</span>
+<span>                  treatment_for_SMD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Placebo"</span>, <span class="st">"Active"</span><span class="op">)</span>, overall <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="several-trials-summaries-by-trial-and-treatment">Several trials: summaries by trial and treatment<a class="anchor" aria-label="anchor" href="#several-trials-summaries-by-trial-and-treatment"></a>
 </h2>
 <p>For pooled individual participant data from multiple trials, <code><a href="reference/nice_trial_table1.html">nice_trial_table1()</a></code> summarizes every trial separately by treatment arm, with the same conventions as <code><a href="reference/nice_SMD_table1.html">nice_SMD_table1()</a></code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/example_trial_data.html">example_trial_data</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Trials side by side (a few trials), SMD within each trial</span></span>
@@ -271,7 +287,7 @@
 <div class="section level2">
 <h2 id="word-and-document-use">Word and document use<a class="anchor" aria-label="anchor" href="#word-and-document-use"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Save while constructing a table, using default portrait settings:</span></span>
 <span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nice_SMD_table1.html">nice_SMD_table1</a></span><span class="op">(</span></span>
 <span>  <span class="va">d</span>, <span class="st">"group"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>,</span>
@@ -306,7 +322,7 @@
 <li><a href="https://hyejung0.github.io/niceSMD/reference/index.html">Function reference</a></li>
 </ul>
 <p>Inside R:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"niceSMD"</span><span class="op">)</span>          <span class="co"># Get started</span></span>
 <span><span class="op">?</span><span class="va">nice_SMD_table1</span>             <span class="co"># every argument, with examples</span></span>
 <span><span class="op">?</span><span class="va">nice_trial_table1</span></span></code></pre></div>
